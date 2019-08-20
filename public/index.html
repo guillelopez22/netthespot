@@ -2,9 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>TheSpot</title>
-    <link rel="stylesheet" href="dist/build.css">
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>thespot</title>
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.min.css">
     <link rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.css">
@@ -12,20 +13,19 @@
     <link href="https://fonts.googleapis.com/css?family=Cormorant+SC|Lobster+Two|Playfair+Display|Slabo|Roboto|Lato|Oswald:700|Source+Sans+Pro" rel="stylesheet">
     <link rel="stylesheet" href="node_modules/sweetalert/dist/sweetalert.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
   </head>
   <body>
+    <noscript>
+      <strong>We're sorry but thespot doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
     <div id="app"></div>
+    <!-- built files will be auto injected -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="node_modules/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="dist/build.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
     <script type="text/javascript" src="node_modules/materialize-css/dist/js/materialize.js"></script>
-    <script>
-      require('./js/renderer');
-    </script>
   </body>
 </html>

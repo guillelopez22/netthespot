@@ -62,12 +62,12 @@ export default {
   },
   methods: {
     getProductos(){
-				this.$http.get('http://localhost:8000/productos').then((response)=>{
+				this.$http.get('https://thespotbackend.herokuapp.com/productos').then((response)=>{
 					this.productos=response.body;
 				});
 			},
     getBebidas(){
-      this.$http.get('http://localhost:8000/bebidas').then((response)=>{
+      this.$http.get('https://thespotbackend.herokuapp.com/bebidas').then((response)=>{
         this.bebidas=response.body;
       });
     }

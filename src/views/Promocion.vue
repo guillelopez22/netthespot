@@ -179,7 +179,7 @@ export default {
       }
     },
       getPromocion(){
-				this.$http.get('http://localhost:8000/promociones').then((response)=>{
+				this.$http.get('https://thespotbackend.herokuapp.com/promociones').then((response)=>{
           this.promociones=response.body;
           this.data = this.promociones.slice(this.inicio,this.final)
         if(this.promociones.length % 5 == 0){
@@ -194,7 +194,7 @@ export default {
         this.final = 5;
         this.currentPage = 1;
 				this.loading=true;
-				this.$http.post('http://localhost:8000/promociones/create',this.promocion)
+				this.$http.post('https://thespotbackend.herokuapp.com/promociones/create',this.promocion)
 				.then((response)=>{
 					this.loading=false;
 					if(response.body.success){
@@ -261,7 +261,7 @@ export default {
             if (inputValue) {
               //****************************************************** */
               _this.loading = true;
-              _this.$http.delete("http://localhost:8000/promociones/delete/" + idPromocion).then(
+              _this.$http.delete("https://thespotbackend.herokuapp.com/promociones/delete/" + idPromocion).then(
                 response => {
                   this.loading = false;
                   if (response.body.success) {

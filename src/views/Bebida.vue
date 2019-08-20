@@ -210,7 +210,7 @@ export default {
         this.nombreProv = "";
       } else {
         this.$http
-          .get("http://localhost:8000/proveedor/searchbyid/{_id}")
+          .get("https://thespotbackend.herokuapp.com/proveedor/searchbyid/{_id}")
           .then(response => {
             this.nombreProv = response.body.proveedor.nombre;
           });
@@ -270,7 +270,7 @@ export default {
     },
     getBebida() {
       let _this = this;
-      this.$http.get("http://localhost:8000/bebidas").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/bebidas").then(response => {
         this.bebidas = response.body;
         response.body.map(function(value, key) {
           var i;
@@ -302,7 +302,7 @@ export default {
       this.loading = true;
       //this.bebida.idProveedor = this.idProv;
       this.$http
-        .post("http://localhost:8000/bebidas/create", this.bebida)
+        .post("https://thespotbackend.herokuapp.com/bebidas/create", this.bebida)
         .then(response => {
           this.loading = false;
           if (response.body.success) {
@@ -346,7 +346,7 @@ export default {
         Materialize.updateTextFields();
         this.$http
           .put(
-            "http://localhost:8000/bebidas/update/" + this.idModificar,
+            "https://thespotbackend.herokuapp.com/bebidas/update/" + this.idModificar,
             this.bebida
           )
           .then(response => {
@@ -387,7 +387,7 @@ export default {
               //****************************************************** */
               _this.loading = false;
               _this.$http
-                .delete("http://localhost:8000/bebidas/delete/" + idBebida)
+                .delete("https://thespotbackend.herokuapp.com/bebidas/delete/" + idBebida)
                 .then(response => {
                   this.loading = false;
                   if (response.body.success) {
@@ -417,7 +417,7 @@ export default {
     },
 
     getProveedores() {
-      this.$http.get("http://localhost:8000/proveedores").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/proveedores").then(response => {
         console.log(response);
         this.proveedores = response.body;
       });

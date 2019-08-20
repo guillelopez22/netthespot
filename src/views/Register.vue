@@ -149,7 +149,7 @@ export default {
       if (this.contrasena === this.contrasena2) {
         this.loading = false;
         console.log(this.usuario);
-        this.$http.post('http://localhost:8000/usuarios/create',this.usuario)
+        this.$http.post('https://thespotbackend.herokuapp.com/usuarios/create',this.usuario)
 				.then((response)=>{
 					this.loading=false;
 					if(response.body.success){

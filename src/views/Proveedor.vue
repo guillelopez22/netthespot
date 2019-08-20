@@ -215,7 +215,7 @@ export default {
       }
     },
     getProveedor() {
-      this.$http.get("http://localhost:8000/proveedores").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/proveedores").then(response => {
         this.proveedores = response.body;
         this.data = this.proveedores.slice(this.inicio,this.final)
         if(this.proveedores.length % 5 == 0){
@@ -231,7 +231,7 @@ export default {
       this.currentPage = 1;
       this.loading = true;
       this.$http
-        .post("http://localhost:8000/proveedor/create", this.proveedor)
+        .post("https://thespotbackend.herokuapp.com/proveedor/create", this.proveedor)
         .then(response => {
           this.loading = false;
           if (response.body.success) {
@@ -310,7 +310,7 @@ export default {
             if (inputValue) {
               //****************************************************** */
               _this.loading = true;
-              _this.$http.delete("http://localhost:8000/proveedor/delete/" + idProveedor).then(
+              _this.$http.delete("https://thespotbackend.herokuapp.com/proveedor/delete/" + idProveedor).then(
                 response => {
                   this.loading = false;
                   if (response.body.success) {

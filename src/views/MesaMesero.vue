@@ -168,7 +168,7 @@ export default {
         this.nombreProv = "";
       } else {
         this.$http
-          .get("http://localhost:8000/orden/searchbyid/{_id}")
+          .get("https://thespotbackend.herokuapp.com/orden/searchbyid/{_id}")
           .then(response => {
             this.nombreProv = response.body.orden.nombre;
           });
@@ -177,7 +177,7 @@ export default {
   },
   methods: {
     getMesa() {
-      this.$http.get("http://localhost:8000/mesas").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/mesas").then(response => {
         this.mesas = response.body;
       });
     },
@@ -195,20 +195,20 @@ export default {
       this.loading = true;
       console.log(this.mesa.nombre);
       this.$http
-        .get("http://localhost:8000/mesas/searchbyname/" + this.mesa.nombre)
+        .get("https://thespotbackend.herokuapp.com/mesas/searchbyname/" + this.mesa.nombre)
         .then(response => {
           if (response.body.length == 0) {
             /*mirar si es el mismo nombre*/
             this.$http
               .get(
-                "http://localhost:8000/mesas/searchbynumero/" + this.mesa.numero
+                "https://thespotbackend.herokuapp.com/mesas/searchbynumero/" + this.mesa.numero
               )
               .then(response => {
                 if (response.body.length == 0) {
                   /*mirar si es el mismo numero*/
                   console.log(this.mesa);
                   this.$http
-                    .post("http://localhost:8000/mesas/create", this.mesa)
+                    .post("https://thespotbackend.herokuapp.com/mesas/create", this.mesa)
                     .then(response => {
                       this.loading = false;
                       if (response.body.success) {
@@ -277,7 +277,7 @@ export default {
         Materialize.updateTextFields();
         this.$http
           .put(
-            "http://localhost:8000/mesas/update/" + this.idModificar,
+            "https://thespotbackend.herokuapp.com/mesas/update/" + this.idModificar,
             this.mesa
           )
           .then(response => {
@@ -312,14 +312,14 @@ export default {
       console.log(this.mesa.orden_id);
       this.$http
         .get(
-          "http://localhost:8000/mesas/searchbyIdOrden/" + this.mesa.orden_id,
+          "https://thespotbackend.herokuapp.com/mesas/searchbyIdOrden/" + this.mesa.orden_id,
           this.mesa._id
         )
         .then(response => {
           console.log(response.body);
         });
       this.$http
-        .delete("http://localhost:8000/mesas/delete/" + idMesa)
+        .delete("https://thespotbackend.herokuapp.com/mesas/delete/" + idMesa)
         .then(response => {
           this.loading = false;
           if (response.body.success) {
@@ -332,7 +332,7 @@ export default {
         });
     },
     getOrdenes() {
-      this.$http.get("http://localhost:8000/ordenes").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/ordenes").then(response => {
         console.log(response);
         this.ordenes = response.body;
       });

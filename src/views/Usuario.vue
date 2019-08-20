@@ -161,7 +161,7 @@ export default {
       }
     },
       getUsuario(){
-				this.$http.get('http://localhost:8000/usuarios').then((response)=>{
+				this.$http.get('https://thespotbackend.herokuapp.com/usuarios').then((response)=>{
           this.usuarios=response.body;
           this.data = this.usuarios.slice(this.inicio,this.final)
         if(this.usuarios.length % 5 == 0){
@@ -206,7 +206,7 @@ export default {
           this.loading = false;
           sweetAlert("Oops...", "El Id Personal contiene letras", "error"); 
         }else{
-          this.$http.post('http://localhost:8000/usuarios/create',this.usuario)
+          this.$http.post('https://thespotbackend.herokuapp.com/usuarios/create',this.usuario)
 				.then((response)=>{
 					this.loading=false;
 					if(response.body.success){
@@ -245,7 +245,7 @@ export default {
         this.loading=true;
         if(this.idModificar!=''){
           Materialize.updateTextFields();
-          this.$http.put('http://localhost:8000/usuarios/update/'+this.idModificar,this.usuario)
+          this.$http.put('https://thespotbackend.herokuapp.com/usuarios/update/'+this.idModificar,this.usuario)
   				.then((response)=>{
   					if(response.body.success){
               this.getUsuario();
@@ -280,7 +280,7 @@ export default {
             if (inputValue) {
               //****************************************************** */
               _this.loading = true;
-              _this.$http.delete("http://localhost:8000/usuarios/delete/" + idUsuario).then(
+              _this.$http.delete("https://thespotbackend.herokuapp.com/usuarios/delete/" + idUsuario).then(
                 response => {
                   this.loading = false;
                   if (response.body.success) {

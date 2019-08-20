@@ -271,7 +271,7 @@ export default {
       this.nombreIns = "";
     } else {
       this.$http
-        .get("http://localhost:8000/insumos/searchbyid/{_id}")
+        .get("https://thespotbackend.herokuapp.com/insumos/searchbyid/{_id}")
         .then(response => {
           this.nombreIns = response.body.insumo.nombre;
         });
@@ -283,7 +283,7 @@ export default {
     getIngredientes(producto){
       var acum = "";
       this.$http
-        .get("http://localhost:8000/productosinsumos")
+        .get("https://thespotbackend.herokuapp.com/productosinsumos")
         .then(response => {
           this.ingr = response.body;
           var i = 0;
@@ -368,7 +368,7 @@ export default {
     },
     getproducto() {
       let _this = this;
-      this.$http.get("http://localhost:8000/productos").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/productos").then(response => {
         this.productos = response.body;
         response.body.map(function(value, key) {
           var j;
@@ -441,7 +441,7 @@ export default {
         sweetAlert("Oops...", "No pueden haber precios negativas", "error");
       } else {
         this.$http
-          .post("http://localhost:8000/productos/create", this.producto)
+          .post("https://thespotbackend.herokuapp.com/productos/create", this.producto)
           .then(response => {
             this.loading = false;
             if (response.body.success) {
@@ -468,7 +468,7 @@ export default {
           
           console.log(_this.productoxinsumo);
           _this.$http
-            .post("http://localhost:8000/productosinsumos/create", _this.productoxinsumo)
+            .post("https://thespotbackend.herokuapp.com/productosinsumos/create", _this.productoxinsumo)
             .then(response => {
               _this.loading = false;
               if (response.body.success) {
@@ -515,7 +515,7 @@ export default {
         //this.producto.idproducto_elaborado = this.idProv;
         this.$http
           .put(
-            "http://localhost:8000/productos/update/" + this.idModificar,
+            "https://thespotbackend.herokuapp.com/productos/update/" + this.idModificar,
             this.producto,
             this.insumo
           )
@@ -555,7 +555,7 @@ export default {
               //****************************************************** */
               _this.loading = true;
               _this.$http
-                .delete("http://localhost:8000/productos/delete/" + idProducto)
+                .delete("https://thespotbackend.herokuapp.com/productos/delete/" + idProducto)
                 .then(response => {
                   
                   if (response.body.success) {
@@ -584,7 +584,7 @@ export default {
     },
     /*getproductos_elaborados() {
       this.$http
-        .get("http://localhost:8000/productos_elaborados")
+        .get("https://thespotbackend.herokuapp.com/productos_elaborados")
         .then(response => {
           console.log(response);
           this.producto_elaborados = response.body;
@@ -592,7 +592,7 @@ export default {
     },*/
 
     getInsumos() {
-      this.$http.get("http://localhost:8000/insumos").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/insumos").then(response => {
         console.log(response);
         this.insumos = response.body;
       });

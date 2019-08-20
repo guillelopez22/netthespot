@@ -192,7 +192,7 @@ export default {
         this.nombreProv = "";
       } else {
         this.$http
-          .get("http://localhost:8000/proveedor/searchbyid/{_id}")
+          .get("https://thespotbackend.herokuapp.com/proveedor/searchbyid/{_id}")
           .then(response => {
             this.nombreProv = response.body.proveedor.nombre;
           });
@@ -259,7 +259,7 @@ export default {
       this.acum = "";
       let _this = this;
       this.$http
-        .get("http://localhost:8000/insumosproveedores")
+        .get("https://thespotbackend.herokuapp.com/insumosproveedores")
         .then(response => {
           this.prvs = response.body;
           var i = 0;
@@ -289,7 +289,7 @@ export default {
     },
     getInsumo() {
       let _this = this;
-      this.$http.get("http://localhost:8000/insumos").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/insumos").then(response => {
         this.insumos = response.body;
         response.body.map(function(value, key) {
           var i;
@@ -322,7 +322,7 @@ export default {
       this.loading = true;
       //this.insumo.idProveedor = this.idProv;
       this.$http
-        .post("http://localhost:8000/insumos/create", this.insumo)
+        .post("https://thespotbackend.herokuapp.com/insumos/create", this.insumo)
         .then(response => {
           this.loading = false;
           if (response.body.success) {
@@ -347,7 +347,7 @@ export default {
           _this.prv.idProveedor = _this.proveedores_a[i];
           _this.prv.idInsumo = _this.insumos[_this.insumos.length - 1]._id;
           _this.$http
-            .post("http://localhost:8000/insumosproveedores/create", _this.prv)
+            .post("https://thespotbackend.herokuapp.com/insumosproveedores/create", _this.prv)
             .then(response => {
               _this.loading = false;
               if (response.body.success) {
@@ -390,7 +390,7 @@ export default {
         //this.insumo.idProveedor = this.idProv;
         this.$http
           .put(
-            "http://localhost:8000/insumos/update/" + this.idModificar,
+            "https://thespotbackend.herokuapp.com/insumos/update/" + this.idModificar,
             this.insumo
           )
           .then(response => {
@@ -429,7 +429,7 @@ export default {
               //****************************************************** */
               _this.loading = true;
               _this.$http
-                .delete("http://localhost:8000/insumos/delete/" + idInsumo)
+                .delete("https://thespotbackend.herokuapp.com/insumos/delete/" + idInsumo)
                 .then(response => {
                   this.loading = false;
                   if (response.body.success) {
@@ -456,7 +456,7 @@ export default {
       );
     },
     getProveedores() {
-      this.$http.get("http://localhost:8000/proveedores").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/proveedores").then(response => {
         console.log(response);
         this.proveedores = response.body;
       });

@@ -386,7 +386,7 @@ export default {
         this.nombreBeb = "";
       } else {
         this.$http
-          .get("http://localhost:8000/bebidas/searchbyid/{_id}")
+          .get("https://thespotbackend.herokuapp.com/bebidas/searchbyid/{_id}")
           .then(response => {
             this.nombreBeb = response.body.bebida.nombre;
           });
@@ -397,7 +397,7 @@ export default {
         this.nombreMes = "";
       } else {
         this.$http
-          .get("http://localhost:8000/mesas/searchbyid/{_id}")
+          .get("https://thespotbackend.herokuapp.com/mesas/searchbyid/{_id}")
           .then(response => {
             this.nombreMes = response.body.mesa.nombre;
           });
@@ -408,7 +408,7 @@ export default {
         this.nombreEmp = "";
       } else {
         this.$http
-          .get("http://localhost:8000/usuarios/searchbyid/{_id}")
+          .get("https://thespotbackend.herokuapp.com/usuarios/searchbyid/{_id}")
           .then(response => {
             this.nombreEmp = response.body.empleado.nombre;
           });
@@ -419,7 +419,7 @@ export default {
         this.nombrePro = "";
       } else {
         this.$http
-          .get("http://localhost:8000/productos/searchbyid/{_id}")
+          .get("https://thespotbackend.herokuapp.com/productos/searchbyid/{_id}")
           .then(response => {
             this.nombrePro = response.body.producto.nombre;
           });
@@ -500,7 +500,7 @@ export default {
       //console.log("primer acum: ",acum)
       let _this = this;
       this.$http
-        .get("http://localhost:8000/ordenesbebidas")
+        .get("https://thespotbackend.herokuapp.com/ordenesbebidas")
         .then(response => {
           this.bebs = response.body;
           var i = 0;
@@ -535,7 +535,7 @@ export default {
       //console.log("primer acum: ",acum)
       let _this = this;
       this.$http
-        .get("http://localhost:8000/productosordenes")
+        .get("https://thespotbackend.herokuapp.com/productosordenes")
         .then(response => {
           this.prds = response.body;
           var i = 0;
@@ -570,7 +570,7 @@ export default {
       //console.log("primer acum: ",acum)
       let _this = this;
       this.$http
-        .get("http://localhost:8000/ordenescombos")
+        .get("https://thespotbackend.herokuapp.com/ordenescombos")
         .then(response => {
           this.cmbs = response.body;
           var i = 0;
@@ -602,7 +602,7 @@ export default {
 
     getorden() {
       let _this = this;
-      this.$http.get("http://localhost:8000/ordenes").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/ordenes").then(response => {
         this.ordenes = response.body;
         response.body.map(function(value, key) {
           var i;
@@ -686,7 +686,7 @@ export default {
         sweetAlert("Oops...", "Error al crear, datos invalidos", "error");
       } else {
         this.$http
-          .post("http://localhost:8000/ordenes/create", this.orden)
+          .post("https://thespotbackend.herokuapp.com/ordenes/create", this.orden)
           .then(response => {
             this.loading = false;
             if (response.body.success) {
@@ -709,7 +709,7 @@ export default {
             _this.cmb.idCombo = _this.combos_a[i];
             _this.cmb.idOrden = _this.ordenes[_this.ordenes.length - 1]._id;
             _this.$http
-              .post("http://localhost:8000/ordenescombos/create", _this.cmb)
+              .post("https://thespotbackend.herokuapp.com/ordenescombos/create", _this.cmb)
               .then(response => {
                 _this.loading = false;
                 if (response.body.success) {
@@ -731,7 +731,7 @@ export default {
             _this.beb.idBebida = _this.bebidas_a[i];
             _this.beb.idOrden = _this.ordenes[_this.ordenes.length - 1]._id;
             _this.$http
-              .post("http://localhost:8000/ordenesbebidas/create", _this.beb)
+              .post("https://thespotbackend.herokuapp.com/ordenesbebidas/create", _this.beb)
               .then(response => {
                 _this.loading = false;
                 if (response.body.success) {
@@ -753,7 +753,7 @@ export default {
             _this.pro.idOrden = _this.ordenes[_this.ordenes.length - 1]._id;
             _this.$http
               .post(
-                "http://localhost:8000/productosordenes/create",
+                "https://thespotbackend.herokuapp.com/productosordenes/create",
                 _this.pro
               )
               .then(response => {
@@ -804,7 +804,7 @@ export default {
         Materialize.updateTextFields();
         this.$http
           .put(
-            "http://localhost:8000/ordenes/update/" + this.idModificar,
+            "https://thespotbackend.herokuapp.com/ordenes/update/" + this.idModificar,
             this.orden
           )
           .then(response => {
@@ -843,7 +843,7 @@ export default {
               //****************************************************** */
               _this.loading = true;
               _this.$http
-                .delete("http://localhost:8000/ordenes/delete/" + idOrden)
+                .delete("https://thespotbackend.herokuapp.com/ordenes/delete/" + idOrden)
                 .then(response => {
                   this.loading = false;
                   if (response.body.success) {
@@ -870,25 +870,25 @@ export default {
       );
     },
     getBebidas() {
-      this.$http.get("http://localhost:8000/bebidas").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/bebidas").then(response => {
         console.log(response);
         this.bebidas = response.body;
       });
     },
     getMesas() {
-      this.$http.get("http://localhost:8000/mesas").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/mesas").then(response => {
         console.log(response);
         this.mesas = response.body;
       });
     },
     getEmpleados() {
-      this.$http.get("http://localhost:8000/usuarios").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/usuarios").then(response => {
         console.log(response);
         this.empleados = response.body;
       });
     },
     getProductos() {
-      this.$http.get("http://localhost:8000/productos").then(response => {
+      this.$http.get("https://thespotbackend.herokuapp.com/productos").then(response => {
         console.log(response);
         this.productos = response.body;
       });
