@@ -11,9 +11,9 @@
               
               <h3>Mesa:{{mesa.numero}}</h3>
               
-              <img src="public\img\martini.jpeg" alt="snow" v-if="mesa.idOrden == null">
+              <img src="public/img/MesaDisponible.jpg" alt="snow" v-if="mesa.idOrden == null">
               
-            <img src="public\img\MesaOcupada.png" alt="snow" v-if="mesa.idOrden != null">
+            <img src="public/img/MesaOcupada.png" alt="snow" v-if="mesa.idOrden != null">
             <a
               v-on:click="deleteMesa(mesa._id)"
               class="btn-floating btn-small waves-effect waves-light blue"

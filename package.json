@@ -13,6 +13,7 @@
     "browserify": "^16.5.0",
     "core-js": "^2.6.5",
     "materialize-css": "^1.0.0",
+    "proxyquireify": "^3.2.1",
     "register-service-worker": "^1.6.2",
     "sweetalert": "^2.1.2",
     "vue": "^2.6.10",
@@ -32,8 +33,9 @@
     "lint-staged": "^8.1.5",
     "node-sass": "^4.12.0",
     "prettier": "^1.18.2",
-    "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.10"
+    "sass-loader": "^7.3.1",
+    "vue-template-compiler": "^2.6.10",
+    "vueify": "^9.4.1"
   },
   "eslintConfig": {
     "root": true,
@@ -66,5 +68,8 @@
       "vue-cli-service lint",
       "git add"
     ]
+  },
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
   }
 }

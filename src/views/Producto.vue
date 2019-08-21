@@ -23,7 +23,6 @@
           <th>Ingrediente</th>
           <th>Tipo</th>
           <th>Precio</th>
-          <!-- > -1 -->
           <th>Cantidad</th>
           <th>Descripcion</th>
           <th>Modificar</th>
@@ -34,7 +33,10 @@
         <tr v-for="(producto,index) in data">
           <td>{{producto.nombre}}</td>
           <td>
-            <button v-on:click="getIngredientes(producto)" class="waves-effect waves-light btn">Mostrar</button>
+            <button
+              v-on:click="getIngredientes(producto)"
+              class="waves-effect waves-light btn"
+            >Mostrar</button>
           </td>
           <td>{{producto.tipo}}</td>
           <td>{{producto.precio}}</td>
@@ -144,71 +146,6 @@
         </select>
       </div>
     </div>
-
-    <!--
-      <div class="row -white" id="contenedorTablaExterna">
-        <div class="col s6">
-          <h5>Seleccionar ID Bebida:</h5>
-          <p>(hacer click en el nombre deseado)</p>
-          <hr />
-          <ul v-for="bebida in bebidas">
-            <li>
-              <i class="material-icons left">pages</i>
-              {{bebida.nombre}}
-              <a
-                v-on:click="newBebida(bebida._id)"
-                class="btn-floating btn-small waves-effect waves-light black secondary-content"
-              >
-                <i class="material-icons">done</i>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="importance" class="input-field col s6 center">
-          <br />
-          <label id="idBebida">
-            <h4>
-              <a v-on:click="borrarBebida()" class="waves-effect waves-light">
-                <i class="material-icons">delete</i>
-              </a>
-              {{idBeb}} {{nombreBeb}}
-            </h4>
-          </label>
-        </div>
-      </div>
-
-      <div class="row -white" id="contenedorTablaExterna">
-        <div class="col s6">
-          <h5>Seleccionar ID Insumo:</h5>
-          <p>(hacer click en el nombre deseado)</p>
-          <hr />
-          <ul v-for="insumo in insumos">
-            <li>
-              <i class="material-icons left">pages</i>
-              {{insumo.nombre}}
-              <a
-                v-on:click="newInsumo(insumo._id)"
-                class="btn-floating btn-small waves-effect waves-light black secondary-content"
-              >
-                <i class="material-icons">done</i>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="importance" class="input-field col s6 center">
-          <br />
-          <label id="idInsumo">
-            <h4>
-              <a v-on:click="borrarInsumo()" class="waves-effect waves-light">
-                <i class="material-icons">delete</i>
-              </a>
-              {{idIns}} {{nombreIns}}
-            </h4>
-          </label>
-        </div>
-      </div>
-    -->
-
     <div id="test-swipe-1" class="col s12">
       <a
         class="waves-effect waves-light btn-large"
@@ -247,9 +184,6 @@ export default {
       idIns: "N/A",
       nombreIns: "",
       selectedTab: "test-swipe-1",
-      //producto_elaborado: {},
-      //producto_elaborados: [],
-      //producto_elaborados2: [],
       insumo: {},
       insumos: [],
       insumos2: [],
@@ -263,9 +197,9 @@ export default {
       productoxinsumo: {},
       ingrtemp: [],
       ingr: [],
+      productosordenes: []
     };
   },
-  //watch: {
   idIns: function(val) {
     if (val != "N/A") {
       this.nombreIns = "";
@@ -277,10 +211,8 @@ export default {
         });
     }
   },
-  //},
-
   methods: {
-    getIngredientes(producto){
+    getIngredientes(producto) {
       var acum = "";
       this.$http
         .get("https://thespotbackend.herokuapp.com/productosinsumos")
@@ -293,28 +225,23 @@ export default {
             }
           }
           var j = 0;
-          for (j = 0; j < this.insumos.length; j++){
-            for (i = 0; i<this.ingrtemp.length;i++){
-              if(this.insumos[j]._id == this.ingrtemp[i]){
-                acum += this.insumos[j].nombre+"\n";
+          for (j = 0; j < this.insumos.length; j++) {
+            for (i = 0; i < this.ingrtemp.length; i++) {
+              if (this.insumos[j]._id == this.ingrtemp[i]) {
+                acum += this.insumos[j].nombre + "\n";
               }
             }
           }
-          
-          sweetAlert(
-            "Ingredientes",
-            acum
-          );
+          sweetAlert("Ingredientes", acum);
           acum = "";
         });
-        acum = "";
-        this.ingr = [];
-        this.ingrtemp= [];
-
+      acum = "";
+      this.ingr = [];
+      this.ingrtemp = [];
     },
     agregarInsumos() {
       this.ingredientes.push(this.ingrediente);
-      sweetAlert("Listo!","Insumo Agregado","success");
+      sweetAlert("Listo!", "Insumo Agregado", "success");
     },
     siguiente() {
       if (this.currentPage < this.size) {
@@ -456,32 +383,34 @@ export default {
               this.getproducto();
             } else {
               sweetAlert("Oops...", "Error al crear", "error");
+              this.getproducto();
             }
           });
         //agregar producto x insumo
         setTimeout(function() {
-        var i;
-        for (i = 0; i < _this.ingredientes.length; i++) {
-          _this.productoxinsumo = {};
-          _this.productoxinsumo.idProducto = _this.productos[_this.productos.length - 1]._id;
-          _this.productoxinsumo.idInsumo = _this.ingredientes[i];
-          
-          console.log(_this.productoxinsumo);
-          _this.$http
-            .post("https://thespotbackend.herokuapp.com/productosinsumos/create", _this.productoxinsumo)
-            .then(response => {
-              _this.loading = false;
-              if (response.body.success) {
-                _this.productoxinsumo = {};
-                console.log("agregó");
-              } else {
-                console.log("tronó");
-              }
-            });
-        }
-        _this.ingredientes = [];
-      }, 1000);
-        
+          var i;
+          for (i = 0; i < _this.ingredientes.length; i++) {
+            _this.productoxinsumo = {};
+            _this.productoxinsumo.idInsumo = _this.ingredientes[i];
+            _this.productoxinsumo.idProducto = _this.productos[_this.productos.length - 1]._id;
+            console.log(_this.productoxinsumo);
+            _this.$http
+              .post(
+                "https://thespotbackend.herokuapp.com/productosinsumos/create",
+                _this.productoxinsumo
+              )
+              .then(response => {
+                _this.loading = false;
+                if (response.body.success) {
+                  _this.productoxinsumo = {};
+                  console.log("agregó");  
+                } else {
+                  console.log("tronó");
+                }
+              });
+          }
+          _this.ingredientes = [];
+        }, 2000);
       }
     },
     tabControl(idTab) {
@@ -538,71 +467,98 @@ export default {
     },
     deleteproducto(idProducto) {
       let _this = this;
-      sweetAlert(
-        {
-          title: "¿Estás seguro?",
-          text: "No podrás revertir los cambios",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Eliminar",
-          cancelButtonText: "Cancelar",
-          showCloseButton: true,
-          showLoaderOnConfirm: true
-        },
-        function(inputValue) {
-          setTimeout(function() {
-            if (inputValue) {
-              //****************************************************** */
-              _this.loading = true;
-              _this.$http
-                .delete("https://thespotbackend.herokuapp.com/productos/delete/" + idProducto)
-                .then(response => {
-                  
-                  if (response.body.success) {
-                    sweetAlert("Oops...", "Error al eliminar", "error");
-                    _this.getproducto();
-                  } else {
-                    sweetAlert(
-                      "Deleted!",
-                      "Los cambios estan en la tabla",
-                      "success"
-                    );
-                    _this.loading = false;
-                    _this.inicio = 0;
-                    _this.final = 5;
-                    _this.currentPage = 1;
-                    _this.getproducto();
-                  }
-                });
-              //****************************************************** */
-            } else {
-              sweetAlert("Cancelado", "Tus datos están a salvo", "info");
-            }
-          }, 500);
+      var entrar = true;
+      for (let i = 0; i < _this.productosordenes.length; i++) {
+        const element = _this.productosordenes[i];
+        if (element.idProducto == idProducto) {
+          entrar = false;
         }
-      );
-    },
-    /*getproductos_elaborados() {
-      this.$http
-        .get("https://thespotbackend.herokuapp.com/productos_elaborados")
-        .then(response => {
-          console.log(response);
-          this.producto_elaborados = response.body;
-        });
-    },*/
+      }
+      if (entrar) {
+        sweetAlert(
+          {
+            title: "¿Estás seguro?",
+            text: "No podrás revertir los cambios",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar",
+            showCloseButton: true,
+            showLoaderOnConfirm: true
+          },
+          function(inputValue) {
+            setTimeout(function() {
+              if (inputValue) {
+                //****************************************************** */
+                _this.loading = true;
+                _this.$http
+                  .delete(
+                    "https://thespotbackend.herokuapp.com/productos/delete/" + idProducto
+                  )
+                  .then(response => {
+                    if (response.body.success) {
+                      sweetAlert("Oops...", "Error al eliminar", "error");
+                      _this.getproducto();
+                    } else {
+                      sweetAlert(
+                        "Deleted!",
+                        "Los cambios estan en la tabla",
+                        "success"
+                      );
+                      _this.loading = false;
+                      _this.inicio = 0;
+                      _this.final = 5;
+                      _this.currentPage = 1;
+                      _this.getproducto();
+                    }
+                  });
 
+                _this.$http
+                  .delete(
+                    "https://thespotbackend.herokuapp.com/productosinsumos/delete/"+idProducto)
+                  .then(response => {
+                    if (response.body.success) {
+                      console.log("nel");
+                    } else {
+                      console.log("simon");
+                    }
+                  });
+
+                //****************************************************** */
+              } else {
+                sweetAlert("Cancelado", "Tus datos están a salvo", "info");
+              }
+            }, 500);
+          }
+        );
+      } else {
+        sweetAlert(
+          "Eliminación Bloqueada",
+          "El registro se encuentra relacionado con otra tabla",
+          "warning"
+        );
+      }
+    },
     getInsumos() {
       this.$http.get("https://thespotbackend.herokuapp.com/insumos").then(response => {
         console.log(response);
         this.insumos = response.body;
       });
+    },
+    getProductosOrdenes() {
+      this.$http
+        .get("https://thespotbackend.herokuapp.com/productosordenes")
+        .then(response => {
+          console.log(response);
+          this.productosordenes = response.body;
+        });
     }
   },
 
   beforeMount() {
-    //this.getproductos_elaborados();
     this.getproducto();
     this.getInsumos();
+    this.getProductosOrdenes();
   },
   mounted() {
     $("ul.tabs").tabs();

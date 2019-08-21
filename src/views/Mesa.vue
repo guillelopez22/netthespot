@@ -20,17 +20,17 @@
       <thead>
         <tr>
           <th>Nombre</th>
-          <th>IdOrden</th>
+          <!--<th>IdOrden</th>-->
           <th>Numero</th>
           <th>Modificar</th>
           <th>Borrar</th>
-          <th>AgregarOrden</th>
+          <!--<th>AgregarOrden</th>-->
         </tr>
       </thead>
       <tbody>
         <tr v-for="mesa in data" v-bind:key="mesa">
           <td>{{mesa.nombre}}</td>
-          <td>{{mesa.idOrden}}</td>
+          <!--<td>{{mesa.idOrden}}</td>-->
           <td>{{mesa.numero}}</td>
           <td>
             <a
@@ -48,14 +48,14 @@
               <i class="material-icons">delete</i>
             </a>
           </td>
-          <td>
+          <!--<td>
             <a
               v-on:click="deleteMesa(mesa._id)"
               class="btn-floating btn-small waves-effect waves-light blue"
             >
               <i class="material-icons">add</i>
             </a>
-          </td>
+          </td>-->
         </tr>
       </tbody>
     </table>
@@ -406,15 +406,14 @@ export default {
     },
     deleteMesa(idMesa) {
       let _this = this;
-      console.log(this.mesa.orden_id);
-      this.$http
-        .get(
-          "https://thespotbackend.herokuapp.com/mesas/searchbyIdOrden/" + this.mesa.orden_id,
-          this.mesa._id
-        )
-        .then(response => {
-          console.log(response.body);
-        });
+      var entrar = true;
+      for (let i = 0; i < _this.ordenes.length; i++) {
+        const element = _this.ordenes[i];
+        if (element.idMesa == idMesa) {
+          entrar = false;
+        }
+      }
+      if (entrar) {
       sweetAlert(
         {
           title: "¿Estás seguro?",
@@ -457,6 +456,13 @@ export default {
           }, 500);
         }
       );
+       } else {
+        sweetAlert(
+          "Eliminación Bloqueada",
+          "El registro se encuentra relacionado con otra tabla",
+          "warning"
+        );
+      }
     },
     getOrdenes() {
       this.$http.get("https://thespotbackend.herokuapp.com/ordenes").then(response => {
