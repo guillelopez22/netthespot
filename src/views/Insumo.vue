@@ -1,7 +1,7 @@
 <template>
   <div id="root">
     <h2>
-      Insumo
+      Ingredientes
       <a
         class="btn-floating btn-small btn tooltipped -red"
         data-position="top"
@@ -13,8 +13,8 @@
       </a>
     </h2>
     <p>Pagina Actual: {{currentPage}}</p>
-    <button v-on:click="anterior()" class="waves-effect waves-light btn-large">Anterior</button>
-    <button v-on:click="siguiente()" class="waves-effect waves-light btn-large">Siguiente</button>
+    <button v-on:click="anterior()" class="waves-effect waves-teal btn-large pulse" >Anterior</button>
+    <button v-on:click="siguiente()" class="waves-effect waves-teal btn-large">Siguiente</button>
     <br />
     <table class="table centered">
       <thead>
@@ -31,12 +31,12 @@
           <td>{{insumo.nombre}}</td>
           <td>{{insumo.inventario}}</td>
           <td>
-            <button v-on:click="getPrv(insumo)" class="waves-effect waves-light btn">Mostrar</button>
+            <button v-on:click="getPrv(insumo)" class="waves-effect waves-teal btn">Mostrar</button>
           </td>
           <td>
             <a
               v-on:click="startToModifyInsumo(insumo)"
-              class="btn-floating btn-small waves-effect waves-light green"
+              class="btn-floating btn-small waves-effect waves-green green"
             >
               <i class="material-icons">update</i>
             </a>
@@ -44,7 +44,7 @@
           <td>
             <a
               v-on:click="deleteInsumo(insumo._id)"
-              class="btn-floating btn-small waves-effect waves-light red"
+              class="btn-floating btn-small waves-effect waves-red red"
             >
               <i class="material-icons">delete</i>
             </a>
@@ -64,6 +64,7 @@
     <div class="row">
       <div class="input-field col s6" id="contenedorTablaExterna">
         <input
+          placeholder=""
           v-on:input="insumo.nombre = $event.target.value"
           type="text"
           v-model="insumo.nombre"
@@ -74,6 +75,7 @@
       </div>
       <div class="input-field col s6" id="contenedorTablaExterna">
         <input
+          placeholder=""
           v-on:input="insumo.inventario = $event.target.value"
           type="number"
           v-model="insumo.inventario"
@@ -83,8 +85,10 @@
         <label for="Inventario">Inventario</label>
       </div>
     </div>
+    
 
-    <button v-on:click="agregarProveedores()" class="waves-effect waves-light btn-large">Agregar</button>
+
+    <button v-on:click="agregarProveedores()" class="waves-effect waves-teal btn-large">Agregar</button>
 
     <label for="proveedor">Seleccione el proveedor</label>
     <div class="row">
@@ -101,40 +105,35 @@
           <option v-for="p in proveedores" v-bind:key="p" :value="p._id">{{p.nombre}}</option>
         </select>
       </div>
-    </div>
-    <!--<div class="row -white" id="contenedorTablaExterna">
+
       <div class="col s6">
-        <h5>Seleccionar ID Proveedor:</h5>
-        <p>(hacer click en el nombre deseado)</p>
-        <hr>
-        <ul v-for="proveedor in proveedores">
-          <li>
-            <i class="material-icons left">pages</i>
-            {{proveedor.nombre}}
-            <a
-              v-on:click="newProveedor(proveedor._id)"
-              class="btn-floating btn-small waves-effect waves-light black secondary-content"
-            >
-              <i class="material-icons">done</i>
-            </a>
-          </li>
-        </ul>
+        <table class = "table2">
+          <thead>
+            <tr>
+              <th>Proveedor</th>
+              <th>Borrar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="i in proveedores_n" v-bind:key="i">
+              <td>{{i.nombre}}</td>
+              <td>
+                <a
+                  v-on:click="eliminarProveedor(i.index)"
+                  class="btn-floating btn-small waves-effect waves-red red"
+                >
+                  <i class="material-icons">delete</i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div id="importance" class="input-field col s6 center">
-        <br>
-        <label id="idProveedor">
-          <h4>
-            <a v-on:click="borrarProveedor()" class="waves-effect waves-light">
-              <i class="material-icons">delete</i>
-            </a>
-            {{idProv}} {{nombreProv}}
-          </h4>
-        </label>
-      </div>
-    </div>-->
+    </div>
+
     <div id="test-swipe-1" class="col s12">
       <a
-        class="waves-effect waves-light btn-large"
+        class="waves-effect waves-teal btn-large"
         v-on:click="createInsumo"
         :disabled="loading"
         id="boton"
@@ -180,11 +179,13 @@ export default {
       size: 1,
       proveedores_a: [],
       proveedor_a: "",
+      proveedores_n: [],
       prv: {},
       prvs: [],
       prvstemp: [],
       acum: "",
-      productosinsumos: []
+      productosinsumos: [],
+      imagen: ""
     };
   },
   watch: {
@@ -193,7 +194,7 @@ export default {
         this.nombreProv = "";
       } else {
         this.$http
-          .get("https://thespotbackend.herokuapp.com/proveedor/searchbyid/{_id}")
+          .get("http://localhost:8000/proveedor/searchbyid/{_id}")
           .then(response => {
             this.nombreProv = response.body.proveedor.nombre;
           });
@@ -201,6 +202,16 @@ export default {
     }
   },
   methods: {
+    cargarImagen() {
+      if (this.imagen != "") {
+        swal({
+        title: "Imagen Cargada Exitosamente!",
+        imageUrl: this.imagen
+      });
+      } else {
+        sweetAlert("Imagen Vacia", "Debe ingresar un URL valido", "warning");
+      }
+    },
     siguiente() {
       if (this.currentPage < this.size) {
         this.currentPage = this.currentPage + 1;
@@ -252,15 +263,52 @@ export default {
       }
     },
     agregarProveedores() {
-      this.proveedores_a.push(this.proveedor_a);
-      console.log("Están los proveedores: ", this.proveedores_a);
-      sweetAlert("¡Listo!", "Proveedor agregado", "success");
+      if (this.proveedor_a != "") {
+        var j;
+        var exist = false;
+        for (j = 0; j < this.proveedores_a.length; j++) {
+          if (this.proveedores_a[j] == this.proveedor_a) {
+            exist = true;
+          }
+        }
+        if (!exist) {
+          this.proveedores_a.push(this.proveedor_a);
+          var i;
+          for (i = 0; i < this.proveedores.length; i++) {
+            if (this.proveedor_a == this.proveedores[i]._id) {
+              var t = {};
+              t.nombre = this.proveedores[i].nombre;
+              t.index = this.proveedores_n.length;
+              this.proveedores_n.push(t);
+            }
+          }
+          sweetAlert("¡Listo!", "Proveedor agregado", "success");
+        } else {
+          sweetAlert(
+            "Oops",
+            "Proveedor invalido, ya fué seleccionado",
+            "warning"
+          );
+        }
+      } else {
+        sweetAlert("Oops", "Proveedor invalido, seleccione uno", "warning");
+      }
+    },
+    eliminarProveedor(index) {
+      var i;
+      this.proveedores_a.splice(index, 1);
+      this.proveedores_n.splice(index, 1);
+      for (i = index; i < this.proveedores_n.length; i++) {
+        this.proveedores_n[i].index = this.proveedores_n[i].index - 1;
+      }
+      console.log("Proveedores borrado: ", this.proveedores_a);
+      console.log("Nombres borrado: ", this.proveedores_n);
     },
     getPrv(insumo) {
       this.acum = "";
       let _this = this;
       this.$http
-        .get("https://thespotbackend.herokuapp.com/insumosproveedores")
+        .get("http://localhost:8000/insumosproveedores")
         .then(response => {
           this.prvs = response.body;
           var i = 0;
@@ -287,7 +335,7 @@ export default {
     },
     getInsumo() {
       let _this = this;
-      this.$http.get("https://thespotbackend.herokuapp.com/insumos").then(response => {
+      this.$http.get("http://localhost:8000/insumos").then(response => {
         this.insumos = response.body;
         response.body.map(function(value, key) {
           var i;
@@ -318,46 +366,53 @@ export default {
       this.final = 5;
       this.currentPage = 1;
       this.loading = true;
-      //this.insumo.idProveedor = this.idProv;
-      this.$http
-        .post("https://thespotbackend.herokuapp.com/insumos/create", this.insumo)
-        .then(response => {
-          this.loading = false;
-          if (response.body.success) {
+      if (this.insumo.nombre == undefined || this.proveedores_a.length == 0) {
+        sweetAlert("Oops", "Hay un campo vacio", "error");
+        this.loading = false;
+      } else {
+        this.$http
+          .post("http://localhost:8000/insumos/create", this.insumo)
+          .then(response => {
+            this.loading = false;
+            if (response.body.success) {        
+              sweetAlert("Oops...", "Error al crear", "error");
+              this.getInsumo();
+            } else {
+              sweetAlert(
+                "Creado con exito!",
+                "Los cambios estan en la tabla",
+                "success"
+              );
+              this.getInsumo();
+            }
             this.insumo = {};
-            sweetAlert(
-              "Creado con exito!",
-              "Los cambios estan en la tabla",
-              "success"
-            );
+          });
 
-            this.getInsumo();
-          } else {
-            sweetAlert("Oops...", "Error al crear", "error");
-            this.getInsumo();
+        setTimeout(function() {
+          var i;
+          for (i = 0; i < _this.proveedores_a.length; i++) {
+            _this.prv = {};
+            _this.prv.idProveedor = _this.proveedores_a[i];
+            _this.prv.idInsumo = _this.insumos[_this.insumos.length - 1]._id;
+            _this.$http
+              .post(
+                "http://localhost:8000/insumosproveedores/create",
+                _this.prv
+              )
+              .then(response => {
+                _this.loading = false;
+                if (response.body.success) {
+                  _this.prv = {};
+                  console.log("agregó");
+                } else {
+                  console.log("tronó");
+                }
+              });
           }
-        });
-
-      setTimeout(function() {
-        var i;
-        for (i = 0; i < _this.proveedores_a.length; i++) {
-          _this.prv = {};
-          _this.prv.idProveedor = _this.proveedores_a[i];
-          _this.prv.idInsumo = _this.insumos[_this.insumos.length - 1]._id;
-          _this.$http
-            .post("https://thespotbackend.herokuapp.com/insumosproveedores/create", _this.prv)
-            .then(response => {
-              _this.loading = false;
-              if (response.body.success) {
-                _this.prv = {};
-                console.log("agregó");
-              } else {
-                console.log("tronó");
-              }
-            });
-        }
-        _this.proveedores_a = [];
-      }, 1000);
+          _this.proveedores_a = [];
+          _this.proveedores_n = [];
+        }, 1000);
+      }
     },
     tabControl(idTab) {
       if (idTab === "test-swipe-1") {
@@ -377,19 +432,43 @@ export default {
       this.selectedTab = "test-swipe-2";
       this.idModificar = insumo._id;
       this.insumo = insumo;
-      this.insumo.idProveedor = insumo.idProveedor;
+      this.imagen = this.insumo.imagen;
+      this.insumo = insumo;
+      this.$http
+        .get("http://localhost:8000/insumosproveedores")
+        .then(response => {
+          this.prvs = response.body;
+          var i = 0;
+          var j;
+          for (j = 0; j < this.prvs.length; j++) {
+            if (this.prvs[j].idInsumo == this.idModificar) {
+              for (i = 0; i < this.proveedores.length; i++) {
+                if (this.prvs[j].idProveedor == this.proveedores[i]._id) {
+                  var t = {};
+                  t.nombre = this.proveedores[i].nombre;
+                  t.index = this.proveedores_n.length;
+                  this.proveedores_n.push(t);
+                  this.proveedores_a.push(this.prvs[j].idProveedor);
+                }
+              }
+            }
+          }
+        });
+      this.prvs = [];
       $("ul.tabs").tabs("select_tab", "test-swipe-2");
       Materialize.updateTextFields();
     },
     modifyInsumo() {
       this.loading = true;
+      let _this = this;
       if (this.idModificar != "") {
         Materialize.updateTextFields();
-        //this.insumo.idProveedor = this.idProv;
+        this.insumo.imagen = this.imagen;
         this.$http
           .put(
-            "https://thespotbackend.herokuapp.com/insumos/update/" + this.idModificar,
-            this.insumo
+            "http://localhost:8000/insumos/update/" + this.idModificar,
+            this.insumo,
+            this.proveedor
           )
           .then(response => {
             if (response.body.success) {
@@ -397,12 +476,57 @@ export default {
               this.loading = false;
               sweetAlert("Oops...", "Error al modificar", "error");
             } else {
+              //agregar nuevos
+
+              this.$http
+                  .delete(
+                    "http://localhost:8000/insumosproveedores/delete/" +
+                      this.idModificar
+                  )
+                  .then(response => {
+                    if (response.body.success) {
+                      console.log("nel");
+                    } else {
+                      console.log("simon");
+                    }
+                  });
+              
+              setTimeout(function() {
+                var i;
+                console.log("Cantidad: " + _this.proveedores_a.length);
+                for (i = 0; i < _this.proveedores_a.length; i++) {
+                  _this.prv = {};
+                  _this.prv.idProveedor = _this.proveedores_a[i];
+                  _this.prv.idInsumo = _this.idModificar;
+                  console.log(_this.prv);
+                  _this.$http
+                    .post(
+                      "http://localhost:8000/insumosproveedores/create",
+                      _this.prv
+                    )
+                    .then(response => {
+                      _this.loading = false;
+                      if (response.body.success) {
+                        _this.prv = {};
+                        console.log("agregó el proveedor");
+                      } else {
+                        console.log("tronó");
+                      }
+                    });
+                }
+                _this.proveedores_a = [];
+                _this.proveedores_n = [];
+              }, 2000);
+
               sweetAlert(
                 "Modificado con exito!",
                 "Los cambios estan en la tabla",
                 "success"
               );
+              this.proveedor = {};
+              this.prv = {};
               this.insumo = {};
+              this.imagen = "";
               this.loading = false;
             }
           });
@@ -415,6 +539,11 @@ export default {
         const element = _this.productosinsumos[i];
         if (element.idInsumo == idInsumo) {
           entrar = false;
+          sweetAlert(
+          "Eliminación Bloqueada",
+          "El ingrediente se encuentra relacionado con Productos",
+          "warning"
+        );
         }
       }
       if (entrar) {
@@ -435,7 +564,7 @@ export default {
                 //****************************************************** */
                 _this.loading = true;
                 _this.$http
-                  .delete("https://thespotbackend.herokuapp.com/insumos/delete/" + idInsumo)
+                  .delete("http://localhost:8000/insumos/delete/" + idInsumo)
                   .then(response => {
                     _this.loading = false;
                     if (response.body.success) {
@@ -453,15 +582,18 @@ export default {
                       _this.getInsumo();
                     }
                   });
-                  _this.$http
-                      .delete("https://thespotbackend.herokuapp.com/insumosproveedores/delete/"+idInsumo)
-                      .then(response => {
-                        if (response.body.success) {
-                          console.log("nel");
-                        } else {
-                          console.log("simon");
-                        }
-                      });
+                _this.$http
+                  .delete(
+                    "http://localhost:8000/insumosproveedores/delete/" +
+                      idInsumo
+                  )
+                  .then(response => {
+                    if (response.body.success) {
+                      console.log("nel");
+                    } else {
+                      console.log("simon");
+                    }
+                  });
                 //****************************************************** */
               } else {
                 sweetAlert("Cancelado", "Tus datos están a salvo", "info");
@@ -469,25 +601,21 @@ export default {
             }, 500);
           }
         );
-      } else {
-        sweetAlert(
-          "Eliminación Bloqueada",
-          "El registro se encuentra relacionado con otra tabla",
-          "warning"
-        );
-      }
+      } 
     },
     getProveedores() {
-      this.$http.get("https://thespotbackend.herokuapp.com/proveedores").then(response => {
+      this.$http.get("http://localhost:8000/proveedores").then(response => {
         console.log(response);
         this.proveedores = response.body;
       });
     },
     getProductosInsumos() {
-      this.$http.get("https://thespotbackend.herokuapp.com/productosinsumos").then(response => {
-        console.log(response);
-        this.productosinsumos = response.body;
-      });
+      this.$http
+        .get("http://localhost:8000/productosinsumos")
+        .then(response => {
+          console.log(response);
+          this.productosinsumos = response.body;
+        });
     }
   },
   beforeMount() {
@@ -558,6 +686,30 @@ th {
   width: 100%;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   animation: float 5s infinite;
+}
+.table2 {
+  color: white;
+  font-family: "Spectral", serif;
+  font-size: 15;
+  border-radius: 3px;
+  border-collapse: collapse;
+  height: 20px;
+  padding: 5px;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
+}
+.table2 th{
+    color: white;
+    background: rgb(16, 175, 167);
+    border-bottom: 2px solid #9ea7af;
+    border-right: 1px solid #343a45;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 12px;
+    text-align: left;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    vertical-align: middle;   
 }
 
 #homeCard {

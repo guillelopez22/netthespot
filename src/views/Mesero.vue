@@ -1,56 +1,10 @@
 <template>
   <div id="root">
-    <h2 >Admin Control</h2>
+    <h2 >Mesero Control</h2>
     <div class="cont">
-      <router-link to="/bebida">
-      <!--col s3 m3 l1 contain waves-effect waves-light z-depth-5 -red-->
-        <div class="col s3 m3 l1 contain mask waves-effect waves-red z-depth-1 -red">
-           Bebidas
-        </div>
-      </router-link>
-      <router-link to="/insumo">
-        <div class="col s3 m3 l1 contain mask waves-effect waves-red z-depth-1 -red">
-           Ingredientes
-        </div>
-      </router-link>
-      <router-link to="/producto">
-        <div class="col s3 m3 l1 contain mask waves-effect waves-red z-depth-1 -red">
-           Productos
-        </div>
-      </router-link>
-      <router-link to="/promocion">
-        <div class="col s3 m3 l1 contain mask waves-effect waves-red z-depth-1 -red">
-           Promociones
-        </div>
-      </router-link>
-      <router-link to="/proveedor">
-        <div class="col s3 m3 l1 contain mask waves-effect waves-red z-depth-1 -red">
-           Proveedores
-        </div>
-      </router-link>
-      <router-link to="/mesa">
-        <div class="col s3 m3 l1 contain mask waves-effect waves-red z-depth-1 -red">
-           Mesas
-        </div>
-      </router-link>
-       <router-link to="/usuario">
-        <div class="col s3 m3 l1 contain mask waves-effect waves-red z-depth-1 -red">
-           Usuarios
-        </div>
-      </router-link>
-      <router-link to="/mesamesero">
-        <div class="col s3 m3 l1 contain mask waves-effect waves-red z-depth-1 -red">
-           Mesas Mesero
-        </div>
-      </router-link>
-      <router-link to="/ordenes">
+      <router-link to="/ordenes3">
         <div class="col s3 m3 l1 contain mask waves-effect waves-red z-depth-1 -red">
            Ordenes
-        </div>
-      </router-link>
-      <router-link to="/combo">
-        <div class="col s3 m3 l1 contain mask waves-effect waves-red z-depth-1 -red">
-           Combos
         </div>
       </router-link>
     </div>
@@ -133,7 +87,7 @@ export default {
     color: #fff;
   }
   .-red{
-    background-color: #C51E07;
+    background-color: #FF0B00;
     color: #fff;
   }
   .-black{

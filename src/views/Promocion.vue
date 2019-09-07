@@ -1,17 +1,17 @@
 <template>
   <div id="root"> 
-    <h2>Promocion</h2>
+    <h2>Promociones</h2>
     <p>Pagina Actual: {{currentPage}}</p>
-  <button v-on:click="anterior()" class="waves-effect waves-light btn-large">Anterior</button>
-    <button v-on:click="siguiente()" class="waves-effect waves-light btn-large">Siguiente</button>
+  <button v-on:click="anterior()" class="waves-effect waves-teal btn-large">Anterior</button>
+    <button v-on:click="siguiente()" class="waves-effect waves-teal btn-large">Siguiente</button>
     <br>
     <table class="table centered">
 			<thead>
 				<tr>
 					<th>Nombre</th>
-					<th>descripcion</th>
-					<th>cantidad</th>
-					<th>descuento</th>
+					<th>Descripción</th>
+					<th>Cantidad</th>
+					<th>Descuento</th>
 					<th>Hora Inicio</th>
 					<th>Hora Final</th>
           <th>Modificar</th>
@@ -27,12 +27,12 @@
 					<td>{{promocion.hora_inicio}}</td>
 					<td>{{promocion.hora_final}}</td>
           <td>
-						<a v-on:click="startToModifyPromocion(promocion)" class="btn-floating btn-small waves-effect waves-light green"
+						<a v-on:click="startToModifyPromocion(promocion)" class="btn-floating btn-small waves-effect waves-grean green"
             >
               <i class="material-icons">update</i></a>
 					</td>
 					<td>
-						<a v-on:click="deletePromocion(promocion._id)" class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">delete</i></a>
+						<a v-on:click="deletePromocion(promocion._id)" class="btn-floating btn-small waves-effect waves-red red"><i class="material-icons">delete</i></a>
 					</td>
 				</tr>
 			</tbody>
@@ -45,41 +45,41 @@
     </ul>
     <div class="row">
         <div class="input-field col s6">
-          <input v-model="promocion.nombre" :disabled="loading"  id="Nombre" type="text" class="validate">
+          <input v-on:input="prmocion.nombre = $event.target.value" placeholder="" v-model="promocion.nombre" :disabled="loading"  id="Nombre" type="text" class="validate">
           <label for="Nombre">Nombre</label>
         </div>
         <div class="input-field col s6">
-          <input v-model="promocion.descripcion" :disabled="loading"  id="Descripcion" type="text" class="validate">
-          <label for="Descripcion">Descripcion</label>
+          <input placeholder="" v-model="promocion.descripcion" :disabled="loading"  id="Descripcion" type="text" class="validate">
+          <label for="Descripcion">Descripción</label>
         </div>
         <div class="input-field col s6">
-          <input type="number" v-model="promocion.cantidad" :disabled="loading"  id="Cantidad">
+          <input placeholder="" type="number" v-model="promocion.cantidad" :disabled="loading"  id="Cantidad">
           <label for="Cantidad">Cantidad</label>
         </div>
         <div class="input-field col s6">
-          <input v-model="promocion.descuento" :disabled="loading" id="Descuento" type="text"  class="validate">
+          <input placeholder="" v-model="promocion.descuento" :disabled="loading" id="Descuento" type="text"  class="validate">
           <label for="Descuento">Descuento</label>
         </div>
         <div class="input-field col s6">
-          <input v-model="promocion.hora_inicio" :disabled="loading" id="hora_inicio" type="text"  class="validate">
+          <input placeholder="" v-model="promocion.hora_inicio" :disabled="loading" id="hora_inicio" type="text"  class="validate">
           <label for="hora_inicio">Hora Inicio</label>
         </div>
         <div class="input-field col s6">
-          <input v-model="promocion.hora_final" :disabled="loading" id="hora_final" type="text"  class="validate">
+          <input placeholder="" v-model="promocion.hora_final" :disabled="loading" id="hora_final" type="text"  class="validate">
           <label for="hora_final">Hora Final</label>
         </div>
       </div>
 
 
   	  <div id="test-swipe-1" class="col s12">
-        <a class="waves-effect waves-light btn-large" v-on:click="createPromocion" :disabled="loading" id="boton">
+        <a class="waves-effect waves-teal btn-large" v-on:click="createPromocion" :disabled="loading" id="boton">
           <i class="material-icons left">create</i>Crear
         </a>
         </div>
   	  <div id="test-swipe-2" class="col s12">
 
 
-  				<a class="waves-effect waves-light btn-large" v-on:click="createPromocion" :disabled="loading" id="boton">
+  				<a class="waves-effect waves-teal btn-large" v-on:click="createPromocion" :disabled="loading" id="boton">
   					<i class="material-icons left">update</i>Update
           </a>
           <span>Selected: {{ selected }}</span>
@@ -88,16 +88,7 @@
               {{ promocion.nombre }}
             </option>
           </select>
-
   		</div>
-      <ul id="example-1">
-        <li v-for="promocion in promociones">
-          <input type="radio" id="one" v-bind:value="promocion.value" v-model="pick" >
-          <label for="one">{{ promocion.nombre }}</label>
-        </li>
-      </ul>
-
-
   </div>
 </template>
 
@@ -179,7 +170,7 @@ export default {
       }
     },
       getPromocion(){
-				this.$http.get('https://thespotbackend.herokuapp.com/promociones').then((response)=>{
+				this.$http.get('http://localhost:8000/promociones').then((response)=>{
           this.promociones=response.body;
           this.data = this.promociones.slice(this.inicio,this.final)
         if(this.promociones.length % 5 == 0){
@@ -194,16 +185,17 @@ export default {
         this.final = 5;
         this.currentPage = 1;
 				this.loading=true;
-				this.$http.post('https://thespotbackend.herokuapp.com/promociones/create',this.promocion)
+				this.$http.post('http://localhost:8000/promociones/create',this.promocion)
 				.then((response)=>{
 					this.loading=false;
-					if(response.body.success){
+					if(!response.body.success){
 						sweetAlert("Creado con exito!", "Los cambios estan en la tabla", "success");
 						this.getPromocion();
 					}else{
 						sweetAlert("Oops...", "Error al crear", "error");
 					}
-				});
+        });
+        this.promocion = {};
       },
       tabControl(idTab){
         if(idTab === 'test-swipe-1'){
@@ -240,7 +232,8 @@ export default {
               this.getPromocion();
               
             }
-  				});
+          });
+          this.promocion = {};
         }
       },
       deletePromocion(idPromocion) {
@@ -261,7 +254,7 @@ export default {
             if (inputValue) {
               //****************************************************** */
               _this.loading = true;
-              _this.$http.delete("https://thespotbackend.herokuapp.com/promociones/delete/" + idPromocion).then(
+              _this.$http.delete("http://localhost:8000/promociones/delete/" + idPromocion).then(
                 response => {
                   this.loading = false;
                   if (response.body.success) {

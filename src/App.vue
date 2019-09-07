@@ -2,13 +2,44 @@
   <div id="app" style="padding-top: 64px;">
     <nav id="elementos" style="background-color: black; position: fixed; top: 0; width: 100%; z-index: 99;">
       <div class="nav-wrapper">
-        <a class="brand-logo z-depth-5"  ><img src="public/img/the_spot.png" class="materialboxed" width="210" height="65" alt="Logo"></a>
+        <a class="brand-logo z-depth-5"  ><img src="../imgs/the_spot.png" class="materialboxed" width="210" height="65" alt="Logo"></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><router-link to="/"><a style="color: white">HOME</a></router-link></li>
-          <li><router-link to="/admin"><a style="color: white">MENU</a></router-link></li>
+          <template v-if="scope === 'cliente'">
+            <li><router-link to="/"><a style="color: white">HOME</a></router-link></li>
+            <li><router-link to="/menu"><a style="color: white">Menu</a></router-link></li>
+          </template>
+          <template v-if="scope === ''">
+            <li><router-link to="/"><a style="color: white">HOME</a></router-link></li>
+            <li><router-link to="/menu"><a style="color: white">Menu</a></router-link></li>
+          </template>
+          <template v-if="scope === undefined">
+            <li><router-link to="/"><a style="color: white">HOME</a></router-link></li>
+            <li><router-link to="/menu"><a style="color: white">Menu</a></router-link></li>
+          </template>
+          <template v-if="scope === 'Cajero'">
+            <li><router-link to="/"><a style="color: white">HOME</a></router-link></li>
+            <li><router-link to="/gerente"><a style="color: white">Gerente</a></router-link></li>
+            <li><router-link to="/menu"><a style="color: white">Menu</a></router-link></li>
+          </template>
+          <template v-if="scope === 'Administrador'">
+             <li><router-link to="/"><a style="color: white">HOME</a></router-link></li>
+             <li><router-link to="/admin"><a style="color: white">Admin</a></router-link></li>
+             <li><router-link to="/menu"><a style="color: white">Menu</a></router-link></li>
+          </template>
+          <template v-if="scope === 'Mesero'">
+              <li><router-link to="/"><a style="color: white">HOME</a></router-link></li>
+              <li><router-link to="/mesero"><a style="color: white">Mesero</a></router-link></li>
+              <li><router-link to="/menu"><a style="color: white">Menu</a></router-link></li>
+          </template>
+          
+          <!--<li><router-link to="/"><a style="color: white">HOME</a></router-link></li>
+          <li><router-link to="/admin"><a style="color: white">Admin</a></router-link></li>
+          <li><router-link to="/menu"><a style="color: white">Cliente</a></router-link></li>
+          <li><router-link to="/gerente"><a style="color: white">Gerente</a></router-link></li>
+          <li><router-link to="/mesero"><a style="color: white">Mesero</a></router-link></li>-->
           <li>
             <nav>
-              <div class="nav-wrapper -white" id="busqueda">
+              <div class="nav-wrapper -red" id="busqueda">
                 <form>
                   <div class="input-field">
                     <input id="search" type="search" required>
@@ -105,12 +136,27 @@
 </template>
 
 <script>
-  import Home from './views/Home.vue'
+  import Home from './components/Home.vue'
   export default {
     name: 'app',
+    data() {
+      return {
+        scope: ""
+      }
+    },
     methods:{
       // $('.tap-target').tapTarget('open'),
       // $('.tap-target').tapTarget('close')
+      getScope(){
+        this.scope = JSON.parse(localStorage.getItem('usuario')).scope;
+        console.log("EL SCOPE ES: "+ this.scope);
+      },
+    },
+    mounted(){
+      this.getScope();
+    },
+    updated(){
+      this.getScope();
     }
   }
 
@@ -156,6 +202,9 @@
     background-color: #262626;
     color: #F4F0EA;
   }
+  .input-field {
+    background-color: #C51E07;
+  }
   #elementos{
     font-family: 'Roboto', sans-serif;
   }
@@ -178,7 +227,7 @@
   #busqueda{
     box-shadow: inset 0 -10px 20px -5px rgba(0,0,0,0.67);
     box-shadow: inset 0 10px 20px -5px rgba(0,0,0,0.67);
-    color: #F4F0EA;
+    color: #C51E07;
   }
   #search:focus {
     -webkit-box-shadow: inset 0px 0px 45px 3px rgba(0,0,0,0.67);

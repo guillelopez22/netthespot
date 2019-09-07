@@ -1,9 +1,9 @@
 <template>
   <div id="root">
-    <h2>Proveedor</h2>
+    <h2>Proveedores</h2>
     <p>Pagina Actual: {{currentPage}}</p>
-    <button v-on:click="anterior()" class="waves-effect waves-light btn-large">Anterior</button>
-    <button v-on:click="siguiente()" class="waves-effect waves-light btn-large">Siguiente</button>
+    <button v-on:click="anterior()" class="waves-effect waves-teal btn-large">Anterior</button>
+    <button v-on:click="siguiente()" class="waves-effect waves-teal btn-large">Siguiente</button>
     <br />
     <table class="table centered">
       <thead>
@@ -13,7 +13,7 @@
           <th>Telefono</th>
           <th>Contacto</th>
           <th>Email</th>
-          <th>Direccion</th>
+          <th>Dirección</th>
           <th>Modificar</th>
           <th>Borrar</th>
         </tr>
@@ -29,7 +29,7 @@
           <td>
             <a
               v-on:click="startToModifyProveedor(proveedor)"
-              class="btn-floating btn-small waves-effect waves-light green"
+              class="btn-floating btn-small waves-effect waves-green green"
             >
               <i class="material-icons">update</i>
             </a>
@@ -37,7 +37,7 @@
           <td>
             <a
               v-on:click="deleteProveedor(proveedor._id)"
-              class="btn-floating btn-small waves-effect waves-light red"
+              class="btn-floating btn-small waves-effect waves-red red"
             >
               <i class="material-icons">delete</i>
             </a>
@@ -58,6 +58,8 @@
     <div class="row">
       <div class="input-field col s6">
         <input
+          placeholder=""
+          v-on:input="proveedor.nombre = $event.target.value"
           v-model="proveedor.nombre"
           :disabled="loading"
           id="Nombre"
@@ -67,15 +69,32 @@
         <label for="Nombre">Nombre</label>
       </div>
       <div class="input-field col s6">
-        <input v-model="proveedor.pais" :disabled="loading" id="Pais" type="text" class="validate" />
+        <input
+          placeholder=""
+          v-on:input="proveedor.pais = $event.target.value"
+          v-model="proveedor.pais"
+          :disabled="loading"
+          id="Pais"
+          type="text"
+          class="validate"
+        />
         <label for="Pais">Pais</label>
       </div>
       <div class="input-field col s6">
-        <input type="number" v-model="proveedor.telefono" :disabled="loading" id="Telefono" />
+        <input
+          placeholder=""
+          v-on:input="proveedor.telefono = $event.target.value"
+          type="number"
+          v-model="proveedor.telefono"
+          :disabled="loading"
+          id="Telefono"
+        />
         <label for="Telefono">Telefono</label>
       </div>
       <div class="input-field col s6">
         <input
+          placeholder=""
+          v-on:input="proveedor.contacto = $event.target.value"
           v-model="proveedor.contacto"
           :disabled="loading"
           id="Contacto"
@@ -86,6 +105,8 @@
       </div>
       <div class="input-field col s6">
         <input
+          placeholder=""
+          v-on:input="proveedor.email = $event.target.value"
           v-model="proveedor.email"
           :disabled="loading"
           id="Email"
@@ -96,19 +117,21 @@
       </div>
       <div class="input-field col s6">
         <input
+          placeholder=""
+          v-on:input="proveedor.direccion = $event.target.value"
           v-model="proveedor.direccion"
           :disabled="loading"
           id="Direccion"
           type="text"
           class="validate"
         />
-        <label for="Direccion">Direccion</label>
+        <label for="Direccion">Dirección</label>
       </div>
     </div>
 
     <div id="test-swipe-1" class="col s12">
       <a
-        class="waves-effect waves-light btn-large"
+        class="waves-effect waves-teal btn-large"
         v-on:click="createProveedor"
         :disabled="loading"
         id="boton"
@@ -118,20 +141,13 @@
     </div>
     <div id="test-swipe-2" class="col s12">
       <a
-        class="waves-effect waves-light btn-large"
+        class="waves-effect waves-teal btn-large"
         v-on:click="createProveedor"
         :disabled="loading"
         id="boton"
       >
         <i class="material-icons left">update</i>Update
       </a>
-      <span>Selected: {{ selected }}</span>
-      <select v-model="selected">
-        <option
-          v-for="proveedor in proveedores"
-          v-bind:value="proveedor.value"
-        >{{ proveedor.nombre }}</option>
-      </select>
     </div>
   </div>
 </template>
@@ -228,7 +244,7 @@ export default {
       }
     },
     getProveedor() {
-      this.$http.get("https://thespotbackend.herokuapp.com/proveedores").then(response => {
+      this.$http.get("http://localhost:8000/proveedores").then(response => {
         this.proveedores = response.body;
         this.data = this.proveedores.slice(this.inicio, this.final);
         if (this.proveedores.length % 5 == 0) {
@@ -243,21 +259,35 @@ export default {
       this.final = 5;
       this.currentPage = 1;
       this.loading = true;
-      this.$http
-        .post("https://thespotbackend.herokuapp.com/proveedor/create", this.proveedor)
-        .then(response => {
-          this.loading = false;
-          if (response.body.success) {
-            sweetAlert(
-              "Creado con exito!",
-              "Los cambios estan en la tabla",
-              "success"
-            );
-            this.getProveedor();
-          } else {
-            sweetAlert("Oops...", "Error al crear", "error");
-          }
-        });
+      if (
+        this.proveedor.nombre == undefined ||
+        this.proveedor.pais == undefined ||
+        this.proveedor.telefono == undefined ||
+        this.proveedor.contacto == undefined ||
+        this.proveedor.email == undefined ||
+        this.proveedor.direccion == undefined
+      ) {
+        this.loading = false;
+        this.getProveedor();
+        sweetAlert("Oops...", "Faltó seleccionar algo", "error");
+      } else {
+        this.$http
+          .post("http://localhost:8000/proveedor/create", this.proveedor)
+          .then(response => {
+            this.loading = false;
+            if (!response.body.success) {
+              sweetAlert(
+                "Creado con exito!",
+                "Los cambios estan en la tabla",
+                "success"
+              );
+              this.getProveedor();
+            } else {
+              sweetAlert("Oops...", "Error al crear", "error");
+            }
+          });
+          this.proveedor = {};
+      }
     },
     tabControl(idTab) {
       if (idTab === "test-swipe-1") {
@@ -312,12 +342,22 @@ export default {
         const element = _this.bebidas[i];
         if (element.idProveedor == idProveedor) {
           entrar = false;
+          sweetAlert(
+          "Eliminación Bloqueada",
+          "El proveedor se encuentra relacionado con Bebidas",
+          "warning"
+        );
         }
       }
       for (let i = 0; i < _this.insumosproveedores.length; i++) {
         const element = _this.insumosproveedores[i];
         if (element.idProveedor == idProveedor) {
           entrar = false;
+          sweetAlert(
+          "Eliminación Bloqueada",
+          "El proveedor se encuentra relacionado con Ingredientes",
+          "warning"
+        );
         }
       }
       if (entrar) {
@@ -339,10 +379,10 @@ export default {
                 _this.loading = true;
                 _this.$http
                   .delete(
-                    "https://thespotbackend.herokuapp.com/proveedor/delete/" + idProveedor
+                    "http://localhost:8000/proveedor/delete/" + idProveedor
                   )
                   .then(response => {
-                    this.loading = false;
+                    _this.loading = false;
                     if (response.body.success) {
                       sweetAlert("Oops...", "Error al eliminar", "error");
                       _this.getProveedor();
@@ -365,25 +405,21 @@ export default {
             }, 500);
           }
         );
-      } else {
-        sweetAlert(
-          "Eliminación Bloqueada",
-          "El registro se encuentra relacionado con otra tabla",
-          "warning"
-        );
-      }
+      } 
     },
     getBebidas() {
-      this.$http.get("https://thespotbackend.herokuapp.com/bebidas").then(response => {
+      this.$http.get("http://localhost:8000/bebidas").then(response => {
         console.log(response);
         this.bebidas = response.body;
       });
     },
     getInsumosProveedores() {
-      this.$http.get("https://thespotbackend.herokuapp.com/insumosproveedores").then(response => {
-        console.log(response);
-        this.insumosproveedores = response.body;
-      });
+      this.$http
+        .get("http://localhost:8000/insumosproveedores")
+        .then(response => {
+          console.log(response);
+          this.insumosproveedores = response.body;
+        });
     }
   },
   beforeMount() {

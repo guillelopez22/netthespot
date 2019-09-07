@@ -13,8 +13,8 @@
       </a>
     </h2>
     <p>Pagina Actual: {{currentPage}}</p>
-    <button v-on:click="anterior()" class="waves-effect waves-light btn-large">Anterior</button>
-    <button v-on:click="siguiente()" class="waves-effect waves-light btn-large">Siguiente</button>
+    <button v-on:click="anterior()" class="waves-effect waves-teal btn-large">Anterior</button>
+    <button v-on:click="siguiente()" class="waves-effect waves-teal btn-large">Siguiente</button>
     <br />
     <table class="table centered">
       <thead>
@@ -35,7 +35,7 @@
           <td>
             <a
               v-on:click="startToModifyMesa(mesa)"
-              class="btn-floating btn-small waves-effect waves-light green"
+              class="btn-floating btn-small waves-effect waves-green green"
             >
               <i class="material-icons">update</i>
             </a>
@@ -43,7 +43,7 @@
           <td>
             <a
               v-on:click="deleteMesa(mesa._id)"
-              class="btn-floating btn-small waves-effect waves-light red"
+              class="btn-floating btn-small waves-effect waves-red red"
             >
               <i class="material-icons">delete</i>
             </a>
@@ -71,6 +71,7 @@
     <div class="row">
       <div class="input-field col s6">
         <input
+          placeholder=""
           v-on:input="mesa.nombre = $event.target.value"
           type="text"
           v-model="mesa.nombre"
@@ -82,6 +83,7 @@
 
       <div class="input-field col s6">
         <input
+          placeholder=""
           v-on:input="mesa.numero = $event.target.value"
           type="number"
           v-model="mesa.numero"
@@ -91,28 +93,10 @@
         <label for="Numero">Numero</label>
       </div>
 
-      <button v-on:click="agregarEmpleados()" class="waves-effect waves-light btn-large">Agregar</button>
-
-      <label for="bebida">Seleccione el empleado</label>
-      <div class="row">
-        <div class="input-field col s6">
-          <select
-            style="color: black"
-            class="browser-default"
-            :disabled="loading"
-            id="idEmpleado"
-            v-on:input="empleado = $event.target.value"
-            type="text"
-            v-model="empleado"
-          >
-            <option v-for="e in empleados2" v-bind:key="e" :value="e._id">{{e.nombre}}</option>
-          </select>
-        </div>
-      </div>
     </div>
     <div id="test-swipe-1" class="col s12">
       <a
-        class="waves-effect waves-light btn-large"
+        class="waves-effect waves-teal btn-large"
         v-on:click="createMesa"
         :disabled="loading"
         id="boton"
@@ -125,7 +109,7 @@
         class="card"
       >Atención: Los cambios realizados no se guardan hasta que haga click en el botón de update.</div>
       <a
-        class="waves-effect waves-light btn-large"
+        class="waves-effect waves-teal btn-large"
         v-on:click="modifyMesa"
         :disabled="loading"
         id="boton"
@@ -167,7 +151,7 @@ export default {
         this.nombreProv = "";
       } else {
         this.$http
-          .get("https://thespotbackend.herokuapp.com/orden/searchbyid/{_id}")
+          .get("http://localhost:8000/orden/searchbyid/{_id}")
           .then(response => {
             this.nombreProv = response.body.orden.nombre;
           });
@@ -226,7 +210,7 @@ export default {
       }
     },
     getMesa() {
-      this.$http.get("https://thespotbackend.herokuapp.com/mesas").then(response => {
+      this.$http.get("http://localhost:8000/mesas").then(response => {
         this.mesas = response.body;
         this.data = this.mesas.slice(this.inicio, this.final);
         if (this.mesas.length % 5 == 0) {
@@ -236,13 +220,13 @@ export default {
         }
       });
 
-      this.$http.get("https://thespotbackend.herokuapp.com/usuarios").then(response => {
+      this.$http.get("http://localhost:8000/usuarios").then(response => {
         console.log(response);
         this.empleados2 = response.body;
       });
     },
     getEmpleados() {
-      this.$http.get("https://thespotbackend.herokuapp.com/usuarios").then(response => {
+      this.$http.get("http://localhost:8000/usuarios").then(response => {
         console.log(response);
         this.empleados2 = response.body;
       });
@@ -269,24 +253,24 @@ export default {
         sweetAlert("Oops...", "Error al crear,esta vacio :(", "error");
       } else {
         this.$http
-          .get("https://thespotbackend.herokuapp.com/mesas/searchbyname/" + this.mesa.nombre)
+          .get("http://localhost:8000/mesas/searchbyname/" + this.mesa.nombre)
           .then(response => {
-            if (response.body.length == 0) {
+            if (!response.body.length == 0) {
               /*mirar si es el mismo nombre*/
               this.$http
                 .get(
-                  "https://thespotbackend.herokuapp.com/mesas/searchbynumero/" +
+                  "http://localhost:8000/mesas/searchbynumero/" +
                     this.mesa.numero
                 )
                 .then(response => {
-                  if (response.body.length == 0) {
+                  if (!response.body.length == 0) {
                     /*mirar si es el mismo numero*/
 
                     this.$http
-                      .post("https://thespotbackend.herokuapp.com/mesas/create", this.mesa)
+                      .post("http://localhost:8000/mesas/create", this.mesa)
                       .then(response => {
                         this.loading = false;
-                        if (response.body.success) {
+                        if (!response.body.success) {
                           this.mesa = {};
                           sweetAlert(
                             "Creado con exito!",
@@ -332,7 +316,7 @@ export default {
           
           console.log(_this.productoxinsumo);
           _this.$http
-            .post("https://thespotbackend.herokuapp.com/mesasempleados/create", _this.mesaxempleado)
+            .post("http://localhost:8000/mesasempleados/create", _this.mesaxempleado)
             .then(response => {
               _this.loading = false;
               if (response.body.success) {
@@ -365,7 +349,6 @@ export default {
       this.selectedTab = "test-swipe-2";
       this.idModificar = mesa._id;
       this.mesa = mesa;
-      /*this.idMesa = mesa.idOrden;*/
       $("ul.tabs").tabs("select_tab", "test-swipe-2");
       Materialize.updateTextFields();
     },
@@ -374,7 +357,7 @@ export default {
       if (this.idModificar != "") {
         this.$http
           .put(
-            "https://thespotbackend.herokuapp.com/mesas/update/" + this.idModificar,
+            "http://localhost:8000/mesas/update/" + this.idModificar,
             this.mesa
           )
           .then(response => {
@@ -395,7 +378,6 @@ export default {
           });
       } else {
         sweetAlert(
-          //ya existe mesa con ese numero
           "Oops...",
           "Error al crear,ya existe una mesa con el mismo numero",
           "error"
@@ -411,6 +393,11 @@ export default {
         const element = _this.ordenes[i];
         if (element.idMesa == idMesa) {
           entrar = false;
+          sweetAlert(
+          "Eliminación Bloqueada",
+          "La mesa se encuentra relacionada con Ordenes",
+          "warning"
+        );
         }
       }
       if (entrar) {
@@ -428,10 +415,9 @@ export default {
         function(inputValue) {
           setTimeout(function() {
             if (inputValue) {
-              //****************************************************** */
               _this.loading = true;
               _this.$http
-                .delete("https://thespotbackend.herokuapp.com/mesas/delete/" + idMesa)
+                .delete("http://localhost:8000/mesas/delete/" + idMesa)
                 .then(response => {
                   this.loading = false;
                   if (response.body.success) {
@@ -456,16 +442,10 @@ export default {
           }, 500);
         }
       );
-       } else {
-        sweetAlert(
-          "Eliminación Bloqueada",
-          "El registro se encuentra relacionado con otra tabla",
-          "warning"
-        );
-      }
+       } 
     },
     getOrdenes() {
-      this.$http.get("https://thespotbackend.herokuapp.com/ordenes").then(response => {
+      this.$http.get("http://localhost:8000/ordenes").then(response => {
         console.log(response);
         this.ordenes = response.body;
       });

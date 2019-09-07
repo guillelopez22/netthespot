@@ -28,67 +28,62 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      name: "Home",
+      name: 'Home',
       path: "/",
       component: Home
     },
     {
-      name: "Menu",
-      path: "/menu",
+      name: 'Menu',
+      path: '/menu',
       component: Menu
     },
     {
-      name: "Register",
+      name: 'Register',
       path: "/registrar",
       component: Register
     },
     {
-      name: "Login",
-      path: "/login",
+      name: 'Login',
+      path: '/login',
       component: Login
     },
     {
-      name: "Admin",
-      path: "/admin",
+      name: 'Admin',
+      path: '/admin',
       component: Admin,
       children: [
         {
-          name: "Bebida",
+          name: 'Bebida',
           path: "/bebida",
           component: Bebida
         },
         {
-          name: "Combo",
-          path: "/combo",
-          component: Combo
-        },
-        {
-          name: "Insumo",
+          name: 'Insumo',
           path: "/insumo",
           component: Insumo
         },
         {
-          name: "Personal",
+          name: 'Personal',
           path: "/personal",
           component: Personal
         },
         {
-          name: "Mesas",
+          name: 'Mesas',
           path: "/mesa",
           component: Mesa
         },
         {
-          name: "Producto",
+          name: 'Producto',
           path: "/producto",
           component: Producto
         },
         {
-          name: "Promocion",
+          name: 'Promocion',
           path: "/promocion",
           component: Promocion
         },
         {
-          name: "Proveedor",
+          name: 'Proveedor',
           path: "/proveedor",
           component: Proveedor
         },
@@ -103,18 +98,67 @@ export default new Router({
           component: ProductoElaborado
         },*/
         {
-          name: "Usuario",
+          name: 'Usuario',
           path: "/usuario",
           component: Usuario
         },
         {
-          name: "MesaMesero",
+          name: 'MesaMesero',
           path: "/mesamesero",
           component: MesaMesero
         },
         {
-          name: "Ordenes",
+          name: 'Ordenes',
           path: "/ordenes",
+          component: Ordenes
+        },
+        {
+          name:'combo',
+          path: '/combo',
+          component: Combo
+        }
+      ]
+    },
+    {
+      name: 'Gerente',
+      path: '/gerente',
+      component: Gerente,
+      children: [
+        {
+          name: 'Bebida',
+          path: "/bebida2",
+          component: Bebida
+        },
+        {
+          name: 'Insumo',
+          path: "/insumo2",
+          component: Insumo
+        },
+        {
+          name: 'Producto',
+          path: "/producto2",
+          component: Producto
+        },
+        {
+          name: 'Ordenes',
+          path: "/ordenes2",
+          component: Ordenes
+        },
+        {
+          name:'combo',
+          path: '/combo2',
+          component: Combo
+        }
+      ]
+    },
+    {
+      name: 'Mesero',
+      path: '/mesero',
+      component: Mesero,
+      children: [
+        {
+          name: 'Ordenes',
+          path: "/ordenes3",
           component: Ordenes
         }
       ]

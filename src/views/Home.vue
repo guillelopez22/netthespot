@@ -26,7 +26,7 @@
         </div>
       </li>
       <li>
-        <img src="public/img/mojito.jpeg">
+        <img src="../imgs/mojito.jpeg">
         <!-- random image -->
         <div class="caption right-align">
           <h3>The Spot</h3>
@@ -44,7 +44,7 @@
     </div>
     <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||-->
     <div class="col s6 flow-text -white center flow-text" id="contenedor-secundario">
-        <img src="public/img/location.gif" height="68" width="68" >
+        <img src="../imgs/location.gif" height="68" width="68" >
         UBICACIÓN:<br>
         <span class="fontBox">Lomas del Guijarro <br>
         Plaza Las Lomas, segundo nivel Antiguo local de Sake Tegucigalpa</span>
@@ -57,7 +57,7 @@
 
     <div class="col s12 l4 imageContainer1" id="imageContainer" >
       <div class="flow-text mision">
-        <img src="public/img/cocina.png" class="invert">
+        <img src="../imgs/cocina.png" class="invert">
         <h3> Calidad de su Menú </h3>
         Un menú con opciones
         clave para satisfacer el paladar de nuestros clientes.
@@ -65,14 +65,14 @@
     </div>
     <div class="col s12 m4 l4 imageContainer2" id="imageContainer" >
       <div class="flow-text mision">
-        <img src="public/img/speaker.png" class="invert">
+        <img src="../imgs/speaker.png" class="invert">
         <h3> Un ambiente agradable </h3>
         El punto de entretenimiento favorito de nuestros clientes.
       </div>
     </div>
     <div class="col s12 m4 l4 imageContainer3" id="imageContainer" >
       <div class="flow-text mision">
-        <img src="public/img/employee.png" class="invert">
+        <img src="../imgs/employee.png" class="invert">
         <h3> Calidad de servicio</h3>
           Con el fin de lograr la preferencia de nuestros usuarios.
       </div>
@@ -129,7 +129,7 @@ export default {
     color: #ffff !important;
   }
   div.bg {
-    background: url('../../public/img/bottles.jpeg') ;
+    background: url('../../imgs/bottles.jpeg') ;
     border: 2px solid black;
     background-size: cover;
   }
@@ -172,15 +172,15 @@ export default {
       color: #000000;
   }
   div .imageContainer1{
-    background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('../../public/img/grill.jpg');
+    background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('../../imgs/grill.jpg');
     background-size: cover;
   }
   div .imageContainer2{
-    background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('../../public/img/table_setting.jpg');
+    background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('../../imgs/table_setting.jpg');
     background-size: cover;
   }
   div .imageContainer3{
-    background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('../../public/img/burger.jpeg');
+    background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('../../imgs/burger.jpeg');
     background-size: cover;
   }
   h3 .mision{
@@ -282,7 +282,7 @@ export default {
     color: #F4F0EA;
   }
   .-red{
-    background-color: #FF0B00;
+    background-color: #C51E07;
     color: #F4F0EA;
   }
   .-black{

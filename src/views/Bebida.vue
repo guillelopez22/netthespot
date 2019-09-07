@@ -1,7 +1,7 @@
 <template>
   <div id="root">
     <h2>
-      Bebida
+      Bebidas
       <a
         class="btn-floating btn-small btn tooltipped -red"
         data-position="top"
@@ -13,8 +13,8 @@
       </a>
     </h2>
     <p>Pagina Actual: {{currentPage}}</p>
-    <button v-on:click="anterior()" class="waves-effect waves-light btn-large">Anterior</button>
-    <button v-on:click="siguiente()" class="waves-effect waves-light btn-large">Siguiente</button>
+    <button v-on:click="anterior()" class="waves-effect waves-teal btn-large pulse">Anterior</button>
+    <button v-on:click="siguiente()" class="waves-effect waves-teal btn-large">Siguiente</button>
     <br />
     <table class="table centered">
       <thead>
@@ -24,6 +24,7 @@
           <th>Tipo</th>
           <th>Inventario</th>
           <th>Descripcion</th>
+          <th>Precio</th>
           <th>Modificar</th>
           <th>Borrar</th>
         </tr>
@@ -35,10 +36,11 @@
           <td>{{bebida.tipo}}</td>
           <td>{{bebida.inventario}}</td>
           <td>{{bebida.descripcion}}</td>
+          <td>{{bebida.precio}}</td>
           <td>
             <a
               v-on:click="startToModifyBebida(bebida)"
-              class="btn-floating btn-small waves-effect waves-light green"
+              class="btn-floating btn-small waves-effect waves-green green"
             >
               <i class="material-icons">update</i>
             </a>
@@ -46,7 +48,7 @@
           <td>
             <a
               v-on:click="deleteBebida(bebida._id)"
-              class="btn-floating btn-small waves-effect waves-light red"
+              class="btn-floating btn-small waves-effect waves-red red"
             >
               <i class="material-icons">delete</i>
             </a>
@@ -64,8 +66,9 @@
       </li>
     </ul>
     <div class="row">
-      <div class="input-field col s12">
+      <div class="input-field col s6">
         <input
+          placeholder
           v-on:input="bebida.nombre = $event.target.value"
           type="text"
           v-model="bebida.nombre"
@@ -76,17 +79,38 @@
       </div>
       <div class="input-field col s6">
         <input
+          placeholder
+          v-on:input="bebida.precio = $event.target.value"
+          type="number"
+          v-model="bebida.precio"
+          :disabled="loading"
+          id="Precio"
+        />
+        <label for="Precio">Precio</label>
+      </div>
+
+      <div class="input-field col s6">
+        <h6>Seleccione el Tipo de Bebida</h6>
+        <select
+          style="color: black"
+          class="browser-default"
           v-on:input="bebida.tipo = $event.target.value"
+          type="text"
           v-model="bebida.tipo"
           :disabled="loading"
           id="Tipo"
-          type="text"
-          class="validate"
-        />
-        <label for="Tipo">Tipo</label>
+          placeholder
+        >
+          <option value="Gaseosa">Gaseosa</option>
+          <option value="Alcohol">Alcohol</option>
+          <option value="Refresco Natural">Refresco Natural</option>
+          <option value="Agua">Agua</option>
+          <option value="BebidasABaseDeCafe">Bebidas A Base De Cafe</option>
+        </select>
       </div>
       <div class="input-field col s6">
         <input
+          placeholder
           v-on:input="bebida.inventario = $event.target.value"
           type="number"
           v-model="bebida.inventario"
@@ -96,23 +120,37 @@
         <label for="Inventario">Inventario</label>
       </div>
 
-      <div class="row">
-        <form class="col s12">
-          <div class="row">
-            <div class="input-field col s12">
-              <textarea
-                v-on:input="bebida.descripcion = $event.target.value"
-                v-model="bebida.descripcion"
-                :disabled="loading"
-                id="Descripcion"
-                type="text"
-                class="materialize-textarea"
-              ></textarea>
+      <div class="input-field col s12">
+        <textarea
+          placeholder
+          v-on:input="bebida.descripcion = $event.target.value"
+          v-model="bebida.descripcion"
+          :disabled="loading"
+          id="Descripcion"
+          type="text"
+          class="materialize-textarea"
+        ></textarea>
 
-              <label for="Descripcion">Descripción</label>
-            </div>
-          </div>
-        </form>
+        <label for="Descripcion">Descripción</label>
+      </div>
+      <div class="row">
+        <div class="input-field col s7">
+          <input
+            placeholder
+            v-on:input="imagen = $event.target.value"
+            type="text"
+            v-model="imagen"
+            :disabled="loading"
+            id="imagen"
+          />
+          <label for="imagen">Imagen</label>
+        </div>
+        <div class="input-field col s5">
+          <button
+            v-on:click="cargarImagen()"
+            class="waves-effect waves-teal btn-large"
+          >Mostrar Imagen</button>
+        </div>
       </div>
 
       <label for="proveedor">Seleccione el proveedor</label>
@@ -131,41 +169,10 @@
           </select>
         </div>
       </div>
-
-      <!--<div class="row -white" id="contenedorTablaExterna">
-        <div class="col s6">
-          <h5>Seleccionar ID Proveedor:</h5>
-          <p>(hacer click en el nombre deseado)</p>
-          <hr>
-          <ul v-for="proveedor in proveedores">
-            <li>
-              <i class="material-icons left">pages</i>
-              {{proveedor.nombre}}
-              <a
-                v-on:click="newProveedor(proveedor._id)"
-                class="btn-floating btn-small waves-effect waves-light black secondary-content"
-              >
-                <i class="material-icons">done</i>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="importance" class="input-field col s6 center">
-          <br>
-          <label id="idProveedor">
-            <h4>
-              <a v-on:click="borrarProveedor()" class="waves-effect waves-light">
-                <i class="material-icons">delete</i>
-              </a>
-              {{idProv}} {{nombreProv}}
-            </h4>
-          </label>
-        </div>
-      </div>-->
     </div>
     <div id="test-swipe-1" class="col s12">
       <a
-        class="waves-effect waves-light btn-large"
+        class="waves-effect waves-teal btn-large"
         v-on:click="createBebida"
         :disabled="loading"
         id="boton"
@@ -178,7 +185,7 @@
         class="card"
       >Atención: Los cambios realizados no se guardan hasta que haga click en el botón de update.</div>
       <a
-        class="waves-effect waves-light btn-large"
+        class="waves-effect waves-light-green btn-large"
         v-on:click="modifyBebida"
         :disabled="loading"
         id="boton"
@@ -209,7 +216,9 @@ export default {
       final: 5,
       currentPage: 1,
       size: 1,
-      ordenesbebidas: []
+      ordenesbebidas: [],
+      imagen: "",
+      combosbebidas: []
     };
   },
   watch: {
@@ -218,7 +227,7 @@ export default {
         this.nombreProv = "";
       } else {
         this.$http
-          .get("https://thespotbackend.herokuapp.com/proveedor/searchbyid/{_id}")
+          .get("http://localhost:8000/proveedor/searchbyid/{_id}")
           .then(response => {
             this.nombreProv = response.body.proveedor.nombre;
           });
@@ -226,6 +235,16 @@ export default {
     }
   },
   methods: {
+    cargarImagen() {
+      if (this.imagen != "") {
+        swal({
+          title: "Imagen Cargada Exitosamente!",
+          imageUrl: this.imagen
+        });
+      } else {
+        sweetAlert("Imagen Vacia", "Debe ingresar un URL valido", "warning");
+      }
+    },
     siguiente() {
       if (this.currentPage < this.size) {
         this.currentPage = this.currentPage + 1;
@@ -278,8 +297,9 @@ export default {
     },
     getBebida() {
       let _this = this;
-      this.$http.get("https://thespotbackend.herokuapp.com/bebidas").then(response => {
+      this.$http.get("http://localhost:8000/bebidas").then(response => {
         this.bebidas = response.body;
+        //await(1);
         response.body.map(function(value, key) {
           var i;
           var p = _this.proveedores;
@@ -309,22 +329,38 @@ export default {
       this.currentPage = 1;
       this.loading = true;
       //this.bebida.idProveedor = this.idProv;
-      this.$http
-        .post("https://thespotbackend.herokuapp.com/bebidas/create", this.bebida)
-        .then(response => {
-          this.loading = false;
-          if (response.body.success) {
-            this.bebida = {};
-            sweetAlert(
-              "Creado con exito!",
-              "Los cambios estan en la tabla",
-              "success"
-            );
-            this.getBebida();
-          } else {
-            sweetAlert("Oops...", "Error al crear", "error");
-          }
-        });
+      if (
+        this.bebida.nombre == undefined ||
+        this.bebida.tipo == undefined ||
+        this.bebida.inventario == undefined ||
+        this.bebida.descripcion == undefined ||
+        this.bebida.idProveedor == undefined ||
+        this.bebida.precio == undefined ||
+        this.imagen == ""
+      ) {
+        this.loading = false;
+        this.getBebida();
+        sweetAlert("Oops...", "Faltó seleccionar algo", "error");
+      } else {
+        this.bebida.imagen = this.imagen;
+        this.$http
+          .post("http://localhost:8000/bebidas/create", this.bebida)
+          .then(response => {
+            this.loading = false;
+            if (response.body.success) {
+              this.bebida = {};
+              this.imagen = "";
+              sweetAlert(
+                "Creado con exito!",
+                "Los cambios estan en la tabla",
+                "success"
+              );
+              this.getBebida();
+            } else {
+              sweetAlert("Oops...", "Error al crear", "error");
+            }
+          });
+      }
     },
     tabControl(idTab) {
       if (idTab === "test-swipe-1") {
@@ -345,6 +381,7 @@ export default {
       this.idModificar = bebida._id;
       this.bebida = bebida;
       this.bebida.idProveedor = bebida.idProveedor;
+      this.imagen = bebida.imagen;
       $("ul.tabs").tabs("select_tab", "test-swipe-2");
       Materialize.updateTextFields();
     },
@@ -352,9 +389,10 @@ export default {
       this.loading = true;
       if (this.idModificar != "") {
         Materialize.updateTextFields();
+        this.bebida.imagen = this.imagen;
         this.$http
           .put(
-            "https://thespotbackend.herokuapp.com/bebidas/update/" + this.idModificar,
+            "http://localhost:8000/bebidas/update/" + this.idModificar,
             this.bebida
           )
           .then(response => {
@@ -369,6 +407,7 @@ export default {
                 "success"
               );
               this.bebida = {};
+              this.imagen = "";
               this.loading = false;
             }
           });
@@ -382,6 +421,22 @@ export default {
         const element = _this.ordenesbebidas[i];
         if (element.idBebida == idBebida) {
           entrar = false;
+          sweetAlert(
+          "Eliminación Bloqueada",
+          "La bebida se encuentra relacionada con Ordenes",
+          "warning"
+        );
+        }
+      }
+      for (let i = 0; i < _this.combosbebidas.length; i++) {
+        const element = _this.combosbebidas[i];
+        if (element.idBebida == idBebida) {
+          entrar = false;
+          sweetAlert(
+          "Eliminación Bloqueada",
+          "La bebida se encuentra relacionada con Combos",
+          "warning"
+        );
         }
       }
       if (entrar) {
@@ -402,10 +457,10 @@ export default {
                 //****************************************************** */
                 _this.loading = false;
                 _this.$http
-                  .delete("https://thespotbackend.herokuapp.com/bebidas/delete/" + idBebida)
+                  .delete("http://localhost:8000/bebidas/delete/" + idBebida)
                   .then(response => {
                     this.loading = false;
-                    if (response.body.success) {
+                    if (!response.body.success) {
                       sweetAlert("Oops...", "Error al eliminar", "error");
                       _this.getBebida();
                     } else {
@@ -428,24 +483,24 @@ export default {
             }, 500);
           }
         );
-      } else {
-        sweetAlert(
-          "Eliminación Bloqueada",
-          "El registro se encuentra relacionado con otra tabla",
-          "warning"
-        );
-      }
+      } 
     },
     getProveedores() {
-      this.$http.get("https://thespotbackend.herokuapp.com/proveedores").then(response => {
+      this.$http.get("http://localhost:8000/proveedores").then(response => {
         console.log(response);
         this.proveedores = response.body;
       });
     },
     getOrdenesBebidas() {
-      this.$http.get("https://thespotbackend.herokuapp.com/ordenesbebidas").then(response => {
+      this.$http.get("http://localhost:8000/ordenesbebidas").then(response => {
         console.log(response);
         this.ordenesbebidas = response.body;
+      });
+    },
+    getCombosBebidas() {
+      this.$http.get("http://localhost:8000/combosbebidas").then(response => {
+        console.log(response);
+        this.combosbebidas = response.body;
       });
     }
   },
@@ -453,6 +508,7 @@ export default {
     this.getProveedores();
     this.getBebida();
     this.getOrdenesBebidas();
+    this.getCombosBebidas();
   },
   mounted() {
     $("ul.tabs").tabs();
@@ -587,7 +643,7 @@ h4 {
 }
 
 .tabs {
-  background-color: #ff0b00 !important;
+  background-color: #A93226 !important;
   color: #4c1b1b !important;
   font-family: "Spectral", serif;
   font-weight: bold;
@@ -628,6 +684,12 @@ label {
   font-size: 17px;
   font-family: "Roboto", sans-serif;
   font-weight: normal;
+}
+h6 {
+  font-size: 17px;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  color:rgb(158, 158, 158)
 }
 .input-field input:focus + label {
   color: #5994aa !important;

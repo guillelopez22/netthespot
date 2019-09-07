@@ -1,7 +1,7 @@
 <template>
   <div id="root">
     <h2>
-      Usuario
+      Usuarios
       <a
         class="btn-floating btn-small btn tooltipped -red"
         data-position="top"
@@ -13,14 +13,12 @@
       </a>
     </h2>
     <p>Pagina Actual: {{currentPage}}</p>
-    <button v-on:click="anterior()" class="waves-effect waves-light btn-large">Anterior</button>
-    <button v-on:click="siguiente()" class="waves-effect waves-light btn-large">Siguiente</button>
+    <button v-on:click="anterior()" class="waves-effect waves-teal btn-large">Anterior</button>
+    <button v-on:click="siguiente()" class="waves-effect waves-teal btn-large">Siguiente</button>
     <br />
     <table class="table centered">
       <thead>
         <tr>
-          <th>Id Personal</th>
-          <th>Id Ordenes</th>
           <th>Usuario</th>
           <th>Nombre</th>
           <th>Telefono</th>
@@ -31,8 +29,6 @@
       </thead>
       <tbody>
         <tr v-for="usuario in data" v-bind:key="usuario">
-          <td>{{usuario.IdPersonal}}</td>
-          <td>{{usuario.idOrdenes}}</td>
           <td>{{usuario.usuario}}</td>
           <td>{{usuario.nombre}}</td>
           <td>{{usuario.telefono}}</td>
@@ -40,7 +36,7 @@
           <td>
             <a
               v-on:click="startToModifyUsuario(usuario)"
-              class="btn-floating btn-small waves-effect waves-light green"
+              class="btn-floating btn-small waves-effect waves-green green"
             >
               <i class="material-icons">update</i>
             </a>
@@ -48,7 +44,7 @@
           <td>
             <a
               v-on:click="deleteUsuario(usuario._id)"
-              class="btn-floating btn-small waves-effect waves-light red"
+              class="btn-floating btn-small waves-effect waves-red red"
             >
               <i class="material-icons">delete</i>
             </a>
@@ -66,29 +62,9 @@
       </li>
     </ul>
     <div class="row">
-      <div class="input-field col s12">
-        <input
-          v-on:input="usuario.IdPersonal = $event.target.value"
-          type="text"
-          v-model="usuario.IdPersonal"
-          :disabled="loading"
-          id="IdPersonal"
-        />
-        <label for="IdPersonal">Id Personal</label>
-      </div>
       <div class="input-field col s6">
         <input
-          v-on:input="usuario.idOrdenes = $event.target.value"
-          v-model="usuario.idOrdenes"
-          :disabled="loading"
-          id="idOrdenes"
-          type="text"
-          class="validate"
-        />
-        <label for="idOrdenes">idOrdenes</label>
-      </div>
-      <div class="input-field col s6">
-        <input
+          placeholder=""
           v-on:input="usuario.usuario = $event.target.value"
           type="text"
           v-model="usuario.usuario"
@@ -99,16 +75,18 @@
       </div>
       <div class="input-field col s6">
         <input
+          placeholder=""
           v-on:input="usuario.contrasena = $event.target.value"
           type="text"
           v-model="usuario.contrasena"
           :disabled="loading"
           id="contrasena"
         />
-        <label for="contrasena">Contrasena</label>
+        <label for="contrasena">Contraseña</label>
       </div>
       <div class="input-field col s6">
         <input
+          placeholder=""
           v-on:input="usuario.nombre = $event.target.value"
           type="text"
           v-model="usuario.nombre"
@@ -119,6 +97,7 @@
       </div>
       <div class="input-field col s6">
         <input
+          placeholder=""
           v-on:input="usuario.telefono = $event.target.value"
           type="text"
           v-model="usuario.telefono"
@@ -127,11 +106,9 @@
         />
         <label for="telefono">Telefono</label>
       </div>
-      <!--<div class="input-field col s6">
-          <input v-on:input="usuario.scope = $event.target.value" type="text" v-model="usuario.scope" :disabled="loading"  id="scope">
-          <label for="scope">Scope</label>
-      </div>-->
-      <label for="scope">Seleccione el tipo de usuario</label>
+    </div>
+    <label for="scope">Seleccione el tipo de usuario:</label>
+    <div class="row">
       <div class="input-field col s6">
         <select
           style="color: black"
@@ -149,9 +126,10 @@
         </select>
       </div>
     </div>
+
     <div id="test-swipe-1" class="col s12">
       <a
-        class="waves-effect waves-light btn-large"
+        class="waves-effect waves-teal btn-large"
         v-on:click="createUsuario"
         :disabled="loading"
         id="boton"
@@ -164,7 +142,7 @@
         class="card"
       >Atención: Los cambios realizados no se guardan hasta que haga click en el botón de update.</div>
       <a
-        class="waves-effect waves-light btn-large"
+        class="waves-effect waves-teal btn-large"
         v-on:click="modifyUsuario"
         :disabled="loading"
         id="boton"
@@ -246,7 +224,7 @@ export default {
       }
     },
     getUsuario() {
-      this.$http.get("https://thespotbackend.herokuapp.com/usuarios").then(response => {
+      this.$http.get("http://localhost:8000/usuarios").then(response => {
         this.usuarios = response.body;
         this.data = this.usuarios.slice(this.inicio, this.final);
         if (this.usuarios.length % 5 == 0) {
@@ -271,15 +249,10 @@ export default {
         this.usuario.nombre == undefined ||
         this.usuario.telefono == undefined ||
         this.usuario.usuario == undefined ||
-        this.usuario.contrasena == undefined ||
-        this.usuario.IdPersonal == undefined ||
-        this.usuario.idOrdenes == undefined
+        this.usuario.contrasena == undefined
       ) {
         this.loading = false;
         sweetAlert("Oops...", "Hay un campo vacio", "error");
-      } else if (this.usuario.IdPersonal.length != 13) {
-        this.loading = false;
-        sweetAlert("Oops...", "El Id personal debe tener 13 numeros", "error");
       } else if (this.usuario.usuario.length < 3) {
         this.loading = false;
         sweetAlert(
@@ -311,17 +284,12 @@ export default {
           "El nombre debe tener por lo menos 3 caracteres ",
           "error"
         );
-      } else if (
-        !(this.usuario.IdPersonal.toLowerCase().match(patt2) == null)
-      ) {
-        this.loading = false;
-        sweetAlert("Oops...", "El Id Personal contiene letras", "error");
       } else {
         this.$http
-          .post("https://thespotbackend.herokuapp.com/usuarios/create", this.usuario)
+          .post("http://localhost:8000/usuarios/create", this.usuario)
           .then(response => {
             this.loading = false;
-            if (response.body.success) {
+            if (!response.body.success) {
               this.usuario = {};
               sweetAlert(
                 "Creado con exito!",
@@ -365,7 +333,7 @@ export default {
         Materialize.updateTextFields();
         this.$http
           .put(
-            "https://thespotbackend.herokuapp.com/usuarios/update/" + this.idModificar,
+            "http://localhost:8000/usuarios/update/" + this.idModificar,
             this.usuario
           )
           .then(response => {
@@ -395,61 +363,60 @@ export default {
         const element = _this.ordenes[i];
         if (element.idUsuario == idUsuario) {
           entrar = false;
+          sweetAlert(
+          "Eliminación Bloqueada",
+          "El usuario se encuentra relacionado con Ordenes",
+          "warning"
+        );
         }
       }
       if (entrar) {
-      sweetAlert(
-        {
-          title: "¿Estás seguro?",
-          text: "No podrás revertir los cambios",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Eliminar",
-          cancelButtonText: "Cancelar",
-          showCloseButton: true,
-          showLoaderOnConfirm: true
-        },
-        function(inputValue) {
-          setTimeout(function() {
-            if (inputValue) {
-              //****************************************************** */
-              _this.loading = true;
-              _this.$http
-                .delete("https://thespotbackend.herokuapp.com/usuarios/delete/" + idUsuario)
-                .then(response => {
-                  this.loading = false;
-                  if (response.body.success) {
-                    sweetAlert("Oops...", "Error al eliminar", "error");
-                    _this.getUsuario();
-                  } else {
-                    sweetAlert(
-                      "Deleted!",
-                      "Los cambios estan en la tabla",
-                      "success"
-                    );
-                    _this.inicio = 0;
-                    _this.final = 5;
-                    _this.currentPage = 1;
-                    _this.getUsuario();
-                  }
-                });
-              //****************************************************** */
-            } else {
-              sweetAlert("Cancelado", "Tus datos están a salvo", "info");
-            }
-          }, 500);
-        }
-      );
-      } else {
         sweetAlert(
-          "Eliminación Bloqueada",
-          "El registro se encuentra relacionado con otra tabla",
-          "warning"
+          {
+            title: "¿Estás seguro?",
+            text: "No podrás revertir los cambios",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar",
+            showCloseButton: true,
+            showLoaderOnConfirm: true
+          },
+          function(inputValue) {
+            setTimeout(function() {
+              if (inputValue) {
+                //****************************************************** */
+                _this.loading = true;
+                _this.$http
+                  .delete("http://localhost:8000/usuarios/delete/" + idUsuario)
+                  .then(response => {
+                    this.loading = false;
+                    if (response.body.success) {
+                      sweetAlert("Oops...", "Error al eliminar", "error");
+                      _this.getUsuario();
+                    } else {
+                      sweetAlert(
+                        "Deleted!",
+                        "Los cambios estan en la tabla",
+                        "success"
+                      );
+                      _this.inicio = 0;
+                      _this.final = 5;
+                      _this.currentPage = 1;
+                      _this.getUsuario();
+                    }
+                  });
+                //****************************************************** */
+              } else {
+                sweetAlert("Cancelado", "Tus datos están a salvo", "info");
+              }
+            }, 500);
+          }
         );
-      }
+      } 
     },
     getOrdenes() {
-      this.$http.get("https://thespotbackend.herokuapp.com/ordenes").then(response => {
+      this.$http.get("http://localhost:8000/ordenes").then(response => {
         console.log(response);
         this.ordenes = response.body;
       });

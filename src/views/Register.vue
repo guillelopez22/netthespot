@@ -140,23 +140,25 @@ export default {
       contrasena: "",
       contrasena2: "",
       loading: false,
-      nombre: ''
+      nombre: '',
+      scope: 'Cliente'
     };
   },
   methods: {
     newUsuario() {
       this.loading = true;
+      this.usuario.scope = this.scope;
       if (this.contrasena === this.contrasena2) {
         this.loading = false;
         console.log(this.usuario);
-        this.$http.post('https://thespotbackend.herokuapp.com/usuarios/create',this.usuario)
+        this.$http.post('http://localhost:8000/usuarios/create',this.usuario)
 				.then((response)=>{
 					this.loading=false;
 					if(response.body.success){
             this.usuario= {};
             this.contrasena = "";
             this.contrasena2 = "";
-						sweetAlert("Creado con exito!", "Los cambios estan en la tabla", "success");
+						sweetAlert("Creado con exito!", "Bienvenido Al Servicio de The Spots", "success");
 						this.getUsuario();
 					}else{
 						sweetAlert("Oops...", "Error al crear", "error");
